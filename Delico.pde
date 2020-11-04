@@ -4,43 +4,52 @@ int[][] drado = {{0,0},{1,0},{0,1},{1,1}};
 int[][] eleD = {{0,0},{1,0},{2,0},{2,1}};
 void setup() {
     size(1600,960);
+    
+    main_board = new Board(20, 20, 255, 80);
+    mini_board = new Board(5, 5, 255, 1120);
 }
 
 void draw() {
-    n = 4;
-    nivel(n);
-    matrx();
-    for (int i = 0; i < 4; ++i) {
-        square((FormaD[i][0]*40)+80,(FormaD[i][1]*40)+80,40);
-    }
+    main_board.display();
+    mini_board.display();
 }
-void matrx(){
-    for (int i = 0; i < 21; ++i) {
-        line(80, 80+(40*i), 80+(40*M), 80+(40*i));
+
+
+class Board{
+
+    private color[][] board_matrix;
+    private color board_color;
+    private int y;
+    private int x;
+    private int block_size;
+    private int space_x;
+
+    Board(int matrix_lines, int matrix_columns, color color_b, int space) {
+        board_matrix = new color[matrix_lines][matrix_columns];
+        board_color = color_b;
+        block_size = 40;
+        y = matrix_lines;
+        x = matrix_columns;
+        space_x = space;
+
+        for(int i = 0; i < y; ++i){
+            for(int j = 0; j < x; ++j){
+                board_matrix[i][j] = board_color; 
+            }
+        }
     }
-    for (int i = 0; i < (M+1); ++i) {
-        line(80+(40*i), 80, 80+(40*i), 880);
+
+    void display(){
+        for(int i = 0; i < y; ++i){
+            for(int j = 0; j < x; ++j){
+                fill(board_matrix[i][j]);
+                square(j * block_size + space_x, i * block_size + 80, block_size);
+            }
+        }
     }
-}
-void nivel(int n){
-    switch(n){
-        case 1:
-            M = 4;
-            break;
-        case 2:
-            M = 6;
-            break;
-        case 3:
-            M = 8;
-            break;
-        case 4:
-            M = 10;
-            break;
-        case 5:
-            M = 12;
-            break;
-        case 6:
-            M = 14;
-            break;
-    }
+
+    
+
+
+
 }
