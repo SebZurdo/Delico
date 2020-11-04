@@ -16,12 +16,12 @@ void draw() {
 
 class Board{
 
-    color[][] board_matrix;
-    color board_color;
-    int y;
-    int x;
-    int block_size;
-    int space_x;
+    private color[][] board_matrix;
+    private color board_color;
+    private int y;
+    private int x;
+    private int block_size;
+    private int space_x;
 
     Board(int matrix_lines, int matrix_columns, color color_b, int space) {
         board_matrix = new color[matrix_lines][matrix_columns];
