@@ -1,4 +1,4 @@
-int M;
+int Size;
 int n;
 int[][] drado = {{0,0},{1,0},{0,1},{1,1}};
 int[][] eleD = {{0,0},{1,0},{2,0},{2,1}};
@@ -19,22 +19,6 @@ void draw() {
     mini_board.display();
     fig.ShowShape();
     fig.GoDown(0);
-    textSize(20);
-    push();
-    fill(0);
-    text("Bloque 1",1000,400);
-    text("x"+str(fig.ShapeD[0][0]),1100,400);
-    text("y"+str(fig.ShapeD[0][1]),1150,400);
-    text("Bloque 2",1000,500);
-    text("x"+str(fig.ShapeD[1][0]),1100,500);
-    text("y"+str(fig.ShapeD[1][1]),1150,500);
-    text("Bloque 3",1000,600);
-    text("x"+str(fig.ShapeD[2][0]),1100,600);
-    text("y"+str(fig.ShapeD[2][1]),1150,600);
-    text("Bloque 4",1000,700);
-    text("x"+str(fig.ShapeD[3][0]),1100,700);
-    text("y"+str(fig.ShapeD[3][1]),1150,700);
-    pop();
 }
 
 void keyPressed() {
@@ -120,65 +104,175 @@ class Shape{
     private int[][] T0 = {{0,0},{1,0},{2,0},{1,1},{1,2}};
     private int[][] U0 = {{0,0},{2,0},{0,1},{1,1},{2,1}};
     private int[][] V0 = {{0,0},{0,1},{0,2},{1,2},{2,2}};
-    private int[][] W1 = {{0,0},{0,1},{1,1},{1,2},{2,2}};
-    private int[][] W2 = {{0,2},{1,2},{1,1},{2,1},{2,0}};
+    private int[][] W0 = {{0,0},{0,1},{1,1},{1,2},{2,2}};
     private int[][] X0 = {{1,0},{0,1},{1,1},{2,1},{1,2}};
     private int[][] Y1 = {{1,0},{0,1},{1,1},{1,2},{1,3}};
     private int[][] Y2 = {{0,0},{0,1},{1,1},{0,2},{0,3}};
-    private int[][] Z0 = {{0,0},{1,0},{1,1},{1,2},{2,2}};
+    private int[][] Z1 = {{0,0},{1,0},{1,1},{1,2},{2,2}};
+    private int[][] Z2 = {{1,0},{2,0},{1,1},{1,2},{0,2}};
     //
     private int[][] ShapeD, OS;
     private int coloration, order,blocks;
     private boolean Moving;
-    private float M;
+    private float Size;
     private int cont, rotcont;
-    public Shape(){
-        M = 40;
+    private int limit;
 
-        order = (int)random(6);
-        switch(order){
-            case 0:
-                ShapeD = drado;
-                coloration = #80aaff;
-                blocks = 4;
-                break;
+    public Shape(){
+        switch(level){
             case 1:
-                ShapeD = line;
-                coloration = #e62e00;
-                blocks = 4;
+                limit = 1;
                 break;
             case 2:
-                ShapeD = treh;
-                coloration = #e67300;
-                blocks = 4;
+                limit = 2;
                 break;
             case 3:
-                ShapeD = eleL;
-                coloration = #999999;
-                blocks = 4;
+                limit = 4;
                 break;
             case 4:
-                ShapeD = eleD;
-                coloration = #e6e6e6;
-                blocks = 4;
+                limit = 11;
                 break;
             case 5:
-                ShapeD = S1;
-                coloration = #00cc00;
-                blocks = 4;
+                limit = 28;
+                break; 
+        }
+        Size = 40;
+        order = (int)random(limit);
+        switch(order){
+            case 0:
+                ShapeD = M0;
+                coloration = #000000;
+                break;
+            case 1:
+                ShapeD = MR;
+                coloration = #d98cb3;
+                break;
+            case 2:
+                ShapeD = C0;
+                coloration = #d1b3ff;
+                break;
+            case 3:
+                ShapeD = R0;
+                coloration = #ffb3d9;
+                break;
+            case 4:
+                ShapeD = drado;
+                coloration = #80aaff;
+                break;
+            case 5:
+                ShapeD = line;
+                coloration = #e62e00;
                 break;
             case 6:
+                ShapeD = treh;
+                coloration = #e67300;
+                break;
+            case 7:
+                ShapeD = eleL;
+                coloration = #999999;
+                break;
+            case 8:
+                ShapeD = eleD;
+                coloration = #e6e6e6;
+                break;
+            case 9:
+                ShapeD = S1;
+                coloration = #00cc00;
+                break;
+            case 10:
                 ShapeD = S2;
                 coloration = #b3e6ff;
-                blocks = 4;
                 break;
+            case 11:
+                ShapeD = F1;
+                coloration = #00cccc;
+                break;
+            case 12:
+                ShapeD = F2;
+                coloration = #ff8000;
+                break;
+            case 13:
+                ShapeD = line2;
+                coloration = #1a1aff;
+                break;
+            case 14:
+                ShapeD = L1;
+                coloration = #ffff00;
+                break;
+            case 15:
+                ShapeD = L2;
+                coloration = #80ffcc;
+                break;
+            case 16:
+                ShapeD = N1;
+                coloration = #33cccc;
+                break;
+            case 17:
+                ShapeD = N2;
+                coloration = #990099;
+                break;
+            case 18:
+                ShapeD = P1;
+                coloration = #ff99c2;
+                break;
+            case 19:
+                ShapeD = P2;
+                coloration = #804000;
+                break;
+            case 20:
+                ShapeD = T0;
+                coloration = #a3a375;
+                break;
+            case 21:
+                ShapeD = U0;
+                coloration = #80ff80;
+                break;
+            case 22:
+                ShapeD = V0;
+                coloration = #df9fdf;
+                break;
+            case 23:
+                ShapeD = W0;
+                coloration = #ff1a1a;
+                break;
+            case 24:
+                ShapeD = X0;
+                coloration = #cc66ff;
+                break;
+            case 25:
+                ShapeD = Y1;
+                coloration = #4d9900;
+                break;
+            case 26:
+                ShapeD = Y2;
+                coloration = #cc3300;
+                break;
+            case 27:
+                ShapeD = Z1;
+                coloration = #bf8040;
+                break;
+            case 28:
+                ShapeD = Z2;
+                coloration = #459eab;
+                break;
+        }
+        if(order == 0){
+            blocks = 1;;
+        }else if (order ==1 ) {
+            blocks = 2;
+        }else if (order > 1 && order <= 3) {
+            blocks = 3;
+        }else if (order > 3 && order <= 10) {
+            blocks = 4;
+        }else{
+            blocks = 5;
         }
         cont = 1;
         OS = ShapeD;
         rotcont = 0;
     }
     public void rotate(){
-        if (ShapeD != drado) {
+        if (ShapeD != drado && ShapeD != X0 && ShapeD != M0) {
             int[][] rotated = new int[blocks][2];
             if (rotcont % 4 == 0) {
                 for (int i = 0; i < blocks; ++i) {
@@ -208,21 +302,15 @@ class Shape{
     public void ShowShape(){
         fill(coloration);
         for (int i = 0; i < blocks; i++) {
-            rect((ShapeD[i][0]*M)+80, (ShapeD[i][1]*M)+80,M,M);
+            rect((ShapeD[i][0]*Size)+80, (ShapeD[i][1]*Size)+80,Size,Size);
         }
     }
-    //-----------------------------------------------------------------------------------------------------------------------------
-    //FUNCIÓN PARA IR HACIA DOWN CONSTANTEMENTE
-    //-----------------------------------------------------------------------------------------------------------------------------
-    public void GoDown(int nivel){
-        if(cont%(55-nivel) == 0){
+    public void GoDown(int level){
+        if(cont%(55-level) == 0){
             MoveShape("DOWN");
         }
         cont++;
     }
-    //-----------------------------------------------------------------------------------------------------------------------------
-    //BOOLEANO PARA CONTROLAR LOS LÍMITES DE LA CUADRÍCULA
-    //-----------------------------------------------------------------------------------------------------------------------------
     public boolean Limit(String dir){
         switch(dir){
             case "RIGHT":
