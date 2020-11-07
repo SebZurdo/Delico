@@ -8,31 +8,33 @@ Shape fig;
 void setup() {
     size(1600,960);
     n = 15;
-    main_board = new Board(20, n, 255, 80);
+    main_board = new Board(20, 20, 255, 80);
     mini_board = new Board(5, 5, 255, 1120);
-    fig = new Shape();
+    fig = new Shape(5);
 }
 
 void draw() {
     background(140);
     main_board.display();
     mini_board.display();
-    fig.ShowShape();
+    //fig.ShowShape();
     fig.GoDown(0);
 }
 
 void keyPressed() {
     if(keyCode == RIGHT){
-        fig.MoveShape("RIGHT");
+        fig.MoveShape("RIGHT", main_board);
     }
     if(keyCode == LEFT){
-        fig.MoveShape("LEFT");
+        fig.MoveShape("LEFT", main_board);
     }
     if(keyCode == DOWN){
-        fig.MoveShape("DOWN");
+        fig.MoveShape("DOWN", main_board);
     }
 }
-void keyReleased() {
+void keyReleased(Shape fig, Board main_board) {
+    
+    
     if(keyCode == UP){
         fig.rotate();
         fig.rotate();
@@ -118,7 +120,7 @@ class Shape{
     private int cont, rotcont;
     private int limit;
 
-    public Shape(){
+    public Shape(int level){
         switch(level){
             case 1:
                 limit = 1;
@@ -296,6 +298,7 @@ class Shape{
                     rotated[i][1] = OS[i][1] - ShapeD[1][1];
                 }
             }
+
             ShapeD = rotated;
         }
     }
@@ -307,7 +310,7 @@ class Shape{
     }
     public void GoDown(int level){
         if(cont%(55-level) == 0){
-            MoveShape("DOWN");
+            MoveShape("DOWN", main_board);
         }
         cont++;
     }
@@ -340,7 +343,11 @@ class Shape{
     //-----------------------------------------------------------------------------------------------------------------------------
     //MOVIMIENTOS LATERALES Y HACIA DOWN CONTROLADOS
     //-----------------------------------------------------------------------------------------------------------------------------
-    public void MoveShape(String dir){
+    public void MoveShape(String dir, Board main_board){
+        for(int i = 0; i < blocks; ++i){
+            main_board.board_matrix[ShapeD[i][1]][ShapeD[i][0]] = 255;
+        }
+
         if(Limit(dir)){
             if(dir == "RIGHT"){
                 for (int i = 0; i < blocks; ++i) {
@@ -357,6 +364,10 @@ class Shape{
                     ShapeD[i][1]++;  //Abajoooooo
                 }
             }
+        }
+
+        for(int i = 0; i < blocks; ++i){
+            main_board.board_matrix[ShapeD[i][1]][ShapeD[i][0]] = coloration;
         }
     }
 
