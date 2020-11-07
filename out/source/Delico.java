@@ -15,18 +15,22 @@ import java.io.IOException;
 public class Delico extends PApplet {
 
 int Size;
-int n;
+int n, level;
 int[][] drado = {{0,0},{1,0},{0,1},{1,1}};
 int[][] eleD = {{0,0},{1,0},{2,0},{2,1}};
 Board main_board;
 Board mini_board;
 Shape fig;
+Shape other;
+int blocks;
 public void setup() {
     
     n = 15;
     main_board = new Board(20, n, 255, 80);
     mini_board = new Board(5, 5, 255, 1120);
     fig = new Shape();
+    other = new Shape();
+    fig.Moving = true;
 }
 
 public void draw() {
@@ -35,6 +39,7 @@ public void draw() {
     mini_board.display();
     fig.ShowShape();
     fig.GoDown(0);
+    fondo();
 }
 
 public void keyPressed() {
@@ -55,7 +60,18 @@ public void keyReleased() {
     }
     fig.rotcont++;
 }
-
+public void fondo(){
+    if (!fig.Moving) {
+        drawf();
+        fig = other;
+        fig.Moving = true;
+        other = new Shape();
+        fig.blocks = other.blocks;
+    }
+}
+public void drawf(){
+    main_board.printS(fig);
+}
 class Board{
 
     private int[][] board_matrix;
@@ -64,6 +80,7 @@ class Board{
     private int x;
     private int block_size;
     private int space_x;
+    private int laX,laY;
 
     Board(int matrix_lines, int matrix_columns, int color_b, int space) {
         board_matrix = new int[matrix_lines][matrix_columns];
@@ -86,6 +103,14 @@ class Board{
                 fill(board_matrix[i][j]);
                 square(j * block_size + space_x, i * block_size + 80, block_size);
             }
+        }
+    }
+
+    public void printS(Shape fig){
+        for (int i = 0; i < blocks; ++i) {
+            laX = fig.ShapeD[i][1];
+            laY = fig.ShapeD[i][0];
+            board_matrix[laX][laY] = fig.coloration;
         }
     }
 
@@ -112,7 +137,7 @@ class Shape{
     private int[][] F2 = {{0,0},{1,0},{1,1},{2,1},{1,2}};
     private int[][] line2 = {{0,0},{1,0},{2,0},{3,0},{4,0}};
     private int[][] L1 = {{0,0},{0,1},{0,2},{0,3},{1,3}};
-    private int[][] L2 = {{0,3},{1,0},{1,1},{1,2},{1,3}};
+    private int[][] L2 = {{0,3},{1,3},{1,2},{1,1},{1,0}};
     private int[][] N1 = {{1,0},{1,1},{0,1},{0,2},{0,3}};
     private int[][] N2 = {{0,0},{0,1},{1,1},{1,2},{1,3}};
     private int[][] P1 = {{1,0},{0,1},{1,1},{0,2},{1,2}};
@@ -128,13 +153,33 @@ class Shape{
     private int[][] Z2 = {{1,0},{2,0},{1,1},{1,2},{0,2}};
     //
     private int[][] ShapeD, OS;
-    private int coloration, order,blocks;
+    private int coloration, order;
     private boolean Moving;
     private float Size;
     private int cont, rotcont;
+    private int limit;
+
     public Shape(){
+        level = 5;
+        switch(level){
+            case 1:
+                limit = 1;
+                break;
+            case 2:
+                limit = 2;
+                break;
+            case 3:
+                limit = 4;
+                break;
+            case 4:
+                limit = 11;
+                break;
+            case 5:
+                limit = 28;
+                break; 
+        }
         Size = 40;
-        order = (int)random(28);
+        order = (int)random(limit);
         switch(order){
             case 0:
                 ShapeD = M0;
@@ -302,18 +347,12 @@ class Shape{
             rect((ShapeD[i][0]*Size)+80, (ShapeD[i][1]*Size)+80,Size,Size);
         }
     }
-    //-----------------------------------------------------------------------------------------------------------------------------
-    //FUNCIÓN PARA IR HACIA DOWN CONSTANTEMENTE
-    //-----------------------------------------------------------------------------------------------------------------------------
     public void GoDown(int level){
         if(cont%(55-level) == 0){
             MoveShape("DOWN");
         }
         cont++;
     }
-    //-----------------------------------------------------------------------------------------------------------------------------
-    //BOOLEANO PARA CONTROLAR LOS LÍMITES DE LA CUADRÍCULA
-    //-----------------------------------------------------------------------------------------------------------------------------
     public boolean Limit(String dir){
         switch(dir){
             case "RIGHT":
@@ -333,6 +372,7 @@ class Shape{
             case "DOWN":
                 for (int i = 0; i < blocks; ++i) {
                     if(ShapeD[i][1]>18){
+                        Moving = false;
                         return false;
                     }
                 }

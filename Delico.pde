@@ -1,16 +1,20 @@
 int Size;
-int n;
+int n, level;
 int[][] drado = {{0,0},{1,0},{0,1},{1,1}};
 int[][] eleD = {{0,0},{1,0},{2,0},{2,1}};
 Board main_board;
 Board mini_board;
 Shape fig;
+Shape other;
+int blocks;
 void setup() {
     size(1600,960);
     n = 15;
     main_board = new Board(20, n, 255, 80);
     mini_board = new Board(5, 5, 255, 1120);
     fig = new Shape();
+    other = new Shape();
+    fig.Moving = true;
 }
 
 void draw() {
@@ -19,6 +23,7 @@ void draw() {
     mini_board.display();
     fig.ShowShape();
     fig.GoDown(0);
+    fondo();
 }
 
 void keyPressed() {
@@ -39,7 +44,18 @@ void keyReleased() {
     }
     fig.rotcont++;
 }
-
+void fondo(){
+    if (!fig.Moving) {
+        drawf();
+        fig = other;
+        fig.Moving = true;
+        other = new Shape();
+        fig.blocks = other.blocks;
+    }
+}
+void drawf(){
+    main_board.printS(fig);
+}
 class Board{
 
     private color[][] board_matrix;
@@ -48,6 +64,7 @@ class Board{
     private int x;
     private int block_size;
     private int space_x;
+    private int laX,laY;
 
     Board(int matrix_lines, int matrix_columns, color color_b, int space) {
         board_matrix = new color[matrix_lines][matrix_columns];
@@ -70,6 +87,14 @@ class Board{
                 fill(board_matrix[i][j]);
                 square(j * block_size + space_x, i * block_size + 80, block_size);
             }
+        }
+    }
+
+    public void printS(Shape fig){
+        for (int i = 0; i < blocks; ++i) {
+            laX = fig.ShapeD[i][1];
+            laY = fig.ShapeD[i][0];
+            board_matrix[laX][laY] = fig.coloration;
         }
     }
 
@@ -96,7 +121,7 @@ class Shape{
     private int[][] F2 = {{0,0},{1,0},{1,1},{2,1},{1,2}};
     private int[][] line2 = {{0,0},{1,0},{2,0},{3,0},{4,0}};
     private int[][] L1 = {{0,0},{0,1},{0,2},{0,3},{1,3}};
-    private int[][] L2 = {{0,3},{1,0},{1,1},{1,2},{1,3}};
+    private int[][] L2 = {{0,3},{1,3},{1,2},{1,1},{1,0}};
     private int[][] N1 = {{1,0},{1,1},{0,1},{0,2},{0,3}};
     private int[][] N2 = {{0,0},{0,1},{1,1},{1,2},{1,3}};
     private int[][] P1 = {{1,0},{0,1},{1,1},{0,2},{1,2}};
@@ -112,13 +137,13 @@ class Shape{
     private int[][] Z2 = {{1,0},{2,0},{1,1},{1,2},{0,2}};
     //
     private int[][] ShapeD, OS;
-    private int coloration, order,blocks;
+    private int coloration, order;
     private boolean Moving;
     private float Size;
     private int cont, rotcont;
     private int limit;
-
     public Shape(){
+        level = 5;
         switch(level){
             case 1:
                 limit = 1;
@@ -330,6 +355,7 @@ class Shape{
             case "DOWN":
                 for (int i = 0; i < blocks; ++i) {
                     if(ShapeD[i][1]>18){
+                        Moving = false;
                         return false;
                     }
                 }
