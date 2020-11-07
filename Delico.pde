@@ -17,11 +17,10 @@ void draw() {
     background(140);
     main_board.display();
     mini_board.display();
-    //fig.ShowShape();
     fig.GoDown(0);
 }
 
-void keyPressed() {
+void keyPressed() { // The fig object updates the main_board matrix within its methods
     if(keyCode == RIGHT){
         fig.MoveShape("RIGHT", main_board);
     }
@@ -32,14 +31,20 @@ void keyPressed() {
         fig.MoveShape("DOWN", main_board);
     }
 }
-void keyReleased(Shape fig, Board main_board) {
-    
-    
+void keyReleased() {
+    for(int i = 0; i < fig.blocks; ++i){ // Here updates its position like in the Moveshape method
+        main_board.board_matrix[fig.ShapeD[i][1]][fig.ShapeD[i][0]] = 255;
+    }
+
     if(keyCode == UP){
         fig.rotate();
         fig.rotate();
     }
     fig.rotcont++;
+
+    for(int i = 0; i < fig.blocks; ++i){
+        main_board.board_matrix[fig.ShapeD[i][1]][fig.ShapeD[i][0]] = fig.coloration;
+    }
 }
 
 class Board{
@@ -344,7 +349,7 @@ class Shape{
     //MOVIMIENTOS LATERALES Y HACIA DOWN CONTROLADOS
     //-----------------------------------------------------------------------------------------------------------------------------
     public void MoveShape(String dir, Board main_board){
-        for(int i = 0; i < blocks; ++i){
+        for(int i = 0; i < blocks; ++i){ // Erases its previous position in the main_board
             main_board.board_matrix[ShapeD[i][1]][ShapeD[i][0]] = 255;
         }
 
@@ -366,7 +371,7 @@ class Shape{
             }
         }
 
-        for(int i = 0; i < blocks; ++i){
+        for(int i = 0; i < blocks; ++i){ // Updates its current position in the main_board
             main_board.board_matrix[ShapeD[i][1]][ShapeD[i][0]] = coloration;
         }
     }
