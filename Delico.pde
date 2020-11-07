@@ -6,13 +6,14 @@ Board main_board;
 Board mini_board;
 Shape fig;
 Shape other;
-int blocks;
 void setup() {
     size(1600,960);
-    n = 15;
-    main_board = new Board(20, 20, 255, 80);
+    n = 20;
+    main_board = new Board(20, n, 255, 80);
     mini_board = new Board(5, 5, 255, 1120);
+    other = new Shape(5);
     fig = new Shape(5);
+    fig.Moving = true;
 }
 
 void draw() {
@@ -20,7 +21,7 @@ void draw() {
     main_board.display();
     mini_board.display();
     fig.GoDown(0);
-    fondo();
+    bottom();
 }
 
 void keyPressed() { // The fig object updates the main_board matrix within its methods
@@ -49,17 +50,13 @@ void keyReleased() {
         main_board.board_matrix[fig.ShapeD[i][1]][fig.ShapeD[i][0]] = fig.coloration;
     }
 }
-void fondo(){
+
+void bottom(){
     if (!fig.Moving) {
-        drawf();
         fig = other;
         fig.Moving = true;
-        other = new Shape();
-        fig.blocks = other.blocks;
+        other = new Shape(5);
     }
-}
-void drawf(){
-    main_board.printS(fig);
 }
 class Board{
 
@@ -94,16 +91,6 @@ class Board{
             }
         }
     }
-
-    public void printS(Shape fig){
-        for (int i = 0; i < blocks; ++i) {
-            laX = fig.ShapeD[i][1];
-            laY = fig.ShapeD[i][0];
-            board_matrix[laX][laY] = fig.coloration;
-        }
-    }
-
-
 }
 class Shape{
     //Monomino//
@@ -147,7 +134,7 @@ class Shape{
     private float Size;
     private int cont, rotcont;
     private int limit;
-
+    private int blocks;
     public Shape(int level){
         switch(level){
             case 1:
