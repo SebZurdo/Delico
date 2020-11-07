@@ -66,7 +66,6 @@ class Board{
     private int x;
     private int block_size;
     private int space_x;
-    private int laX,laY;
 
     Board(int matrix_lines, int matrix_columns, color color_b, int space) {
         board_matrix = new color[matrix_lines][matrix_columns];
