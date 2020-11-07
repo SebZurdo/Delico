@@ -4,60 +4,57 @@ int[][] drado = {{0,0},{1,0},{0,1},{1,1}};
 int[][] eleD = {{0,0},{1,0},{2,0},{2,1}};
 Board main_board;
 Board mini_board;
-Forma fig;
+Shape fig;
 void setup() {
     size(1600,960);
     n = 15;
     main_board = new Board(20, n, 255, 80);
     mini_board = new Board(5, 5, 255, 1120);
-    fig = new Forma();
+    fig = new Shape();
 }
 
 void draw() {
     background(140);
     main_board.display();
     mini_board.display();
-    fig.mostrarF();
-    fig.pabajo(0);
+    fig.ShowShape();
+    fig.GoDown(0);
     textSize(20);
     push();
     fill(0);
     text("Bloque 1",1000,400);
-    text("x"+str(fig.FormaD[0][0]),1100,400);
-    text("y"+str(fig.FormaD[0][1]),1150,400);
+    text("x"+str(fig.ShapeD[0][0]),1100,400);
+    text("y"+str(fig.ShapeD[0][1]),1150,400);
     text("Bloque 2",1000,500);
-    text("x"+str(fig.FormaD[1][0]),1100,500);
-    text("y"+str(fig.FormaD[1][1]),1150,500);
+    text("x"+str(fig.ShapeD[1][0]),1100,500);
+    text("y"+str(fig.ShapeD[1][1]),1150,500);
     text("Bloque 3",1000,600);
-    text("x"+str(fig.FormaD[2][0]),1100,600);
-    text("y"+str(fig.FormaD[2][1]),1150,600);
+    text("x"+str(fig.ShapeD[2][0]),1100,600);
+    text("y"+str(fig.ShapeD[2][1]),1150,600);
     text("Bloque 4",1000,700);
-    text("x"+str(fig.FormaD[3][0]),1100,700);
-    text("y"+str(fig.FormaD[3][1]),1150,700);
+    text("x"+str(fig.ShapeD[3][0]),1100,700);
+    text("y"+str(fig.ShapeD[3][1]),1150,700);
     pop();
 }
 
 void keyPressed() {
     if(keyCode == RIGHT){
-        fig.mover("DER");
+        fig.MoveShape("RIGHT");
     }
     if(keyCode == LEFT){
-        fig.mover("IZQ");
+        fig.MoveShape("LEFT");
     }
     if(keyCode == DOWN){
-        fig.mover("ABAJO");
+        fig.MoveShape("DOWN");
     }
 }
 void keyReleased() {
     if(keyCode == UP){
-        fig.rota();
-        fig.rota();
+        fig.rotate();
+        fig.rotate();
     }
     fig.rotcont++;
 }
-
-mousePressed
-
 
 class Board{
 
@@ -94,7 +91,7 @@ class Board{
 
 
 }
-class Forma{
+class Shape{
     //Monomino//
     private int[][] M0 = {{0,0}};
     //Binomino//
@@ -130,120 +127,121 @@ class Forma{
     private int[][] Y2 = {{0,0},{0,1},{1,1},{0,2},{0,3}};
     private int[][] Z0 = {{0,0},{1,0},{1,1},{1,2},{2,2}};
     //
-    private int[][] FormaD, OF;
-    private int coloration, orden,blocks;
-    private boolean EnMovi;
+    private int[][] ShapeD, OS;
+    private int coloration, order,blocks;
+    private boolean Moving;
     private float M;
     private int cont, rotcont;
-    public Forma(){
+    public Shape(){
         M = 40;
-        orden = (int)random(6);
-        switch(orden){
+
+        order = (int)random(6);
+        switch(order){
             case 0:
-                FormaD = drado;
+                ShapeD = drado;
                 coloration = #80aaff;
                 blocks = 4;
                 break;
             case 1:
-                FormaD = line;
+                ShapeD = line;
                 coloration = #e62e00;
                 blocks = 4;
                 break;
             case 2:
-                FormaD = treh;
+                ShapeD = treh;
                 coloration = #e67300;
                 blocks = 4;
                 break;
             case 3:
-                FormaD = eleL;
+                ShapeD = eleL;
                 coloration = #999999;
                 blocks = 4;
                 break;
             case 4:
-                FormaD = eleD;
+                ShapeD = eleD;
                 coloration = #e6e6e6;
                 blocks = 4;
                 break;
             case 5:
-                FormaD = S1;
+                ShapeD = S1;
                 coloration = #00cc00;
                 blocks = 4;
                 break;
             case 6:
-                FormaD = S2;
+                ShapeD = S2;
                 coloration = #b3e6ff;
                 blocks = 4;
                 break;
         }
         cont = 1;
-        OF = FormaD;
+        OS = ShapeD;
         rotcont = 0;
     }
-    public void rota(){
-        if (FormaD != drado) {
+    public void rotate(){
+        if (ShapeD != drado) {
             int[][] rotated = new int[blocks][2];
             if (rotcont % 4 == 0) {
                 for (int i = 0; i < blocks; ++i) {
-                    rotated[i][0] = -OF[i][1] - FormaD[1][0];
-                    rotated[i][1] = OF[i][0] - FormaD[1][1];
+                    rotated[i][0] = -OS[i][1] - ShapeD[1][0];
+                    rotated[i][1] = OS[i][0] - ShapeD[1][1];
                 }
             }else if (rotcont % 4 == 1) {
                 for (int i = 0; i < blocks; ++i) {
-                    rotated[i][0] = -OF[i][0] - FormaD[1][0];
-                    rotated[i][1] = -OF[i][1] - FormaD[1][1];
+                    rotated[i][0] = -OS[i][0] - ShapeD[1][0];
+                    rotated[i][1] = -OS[i][1] - ShapeD[1][1];
                 }
             }else if (rotcont % 4 == 2) {
                 for (int i = 0; i < blocks; ++i) {
-                    rotated[i][0] = OF[i][1] - FormaD[1][0];
-                    rotated[i][1] = -OF[i][0] - FormaD[1][1];
+                    rotated[i][0] = OS[i][1] - ShapeD[1][0];
+                    rotated[i][1] = -OS[i][0] - ShapeD[1][1];
                 }
             
             }else if (rotcont % 4 == 3) {
                 for (int i = 0; i < blocks; ++i) {
-                    rotated[i][0] = OF[i][0] - FormaD[1][0];
-                    rotated[i][1] = OF[i][1] - FormaD[1][1];
+                    rotated[i][0] = OS[i][0] - ShapeD[1][0];
+                    rotated[i][1] = OS[i][1] - ShapeD[1][1];
                 }
             }
-            FormaD = rotated;
+            ShapeD = rotated;
         }
     }
-    public void mostrarF(){
+    public void ShowShape(){
         fill(coloration);
         for (int i = 0; i < blocks; i++) {
-            rect((FormaD[i][0]*M)+80, (FormaD[i][1]*M)+80,M,M);
+            rect((ShapeD[i][0]*M)+80, (ShapeD[i][1]*M)+80,M,M);
         }
     }
     //-----------------------------------------------------------------------------------------------------------------------------
-    //FUNCIÓN PARA IR HACIA ABAJO CONSTANTEMENTE
+    //FUNCIÓN PARA IR HACIA DOWN CONSTANTEMENTE
     //-----------------------------------------------------------------------------------------------------------------------------
-    public void pabajo(int nivel){
+    public void GoDown(int nivel){
         if(cont%(55-nivel) == 0){
-            mover("ABAJO");
+            MoveShape("DOWN");
         }
         cont++;
     }
     //-----------------------------------------------------------------------------------------------------------------------------
     //BOOLEANO PARA CONTROLAR LOS LÍMITES DE LA CUADRÍCULA
     //-----------------------------------------------------------------------------------------------------------------------------
-    public boolean limite(String dir){
+    public boolean Limit(String dir){
         switch(dir){
-            case "DER":
+            case "RIGHT":
                 for (int i = 0; i < blocks; ++i) {
-                    if(FormaD[i][0]>(n-2)){
+                    if(ShapeD[i][0]>(n-2)){
                         return false;
                     }
                 }
                 break;
-            case "IZQ":
+            case "LEFT":
                 for (int i = 0; i < blocks; ++i) {
-                    if(FormaD[i][0]<1){
+                    if(ShapeD[i][0]<1){
                         return false;
                     }
                 }
                 break;
-            case "ABAJO":
+            case "DOWN":
                 for (int i = 0; i < blocks; ++i) {
-                    if(FormaD[i][1]>18){
+                    if(ShapeD[i][1]>18){
                         return false;
                     }
                 }
@@ -252,23 +250,23 @@ class Forma{
         return true;
     }
     //-----------------------------------------------------------------------------------------------------------------------------
-    //MOVIMIENTOS LATERALES Y HACIA ABAJO CONTROLADOS
+    //MOVIMIENTOS LATERALES Y HACIA DOWN CONTROLADOS
     //-----------------------------------------------------------------------------------------------------------------------------
-    public void mover(String dir){
-        if(limite(dir)){
-            if(dir == "DER"){
+    public void MoveShape(String dir){
+        if(Limit(dir)){
+            if(dir == "RIGHT"){
                 for (int i = 0; i < blocks; ++i) {
-                    FormaD[i][0]++;  //Dereiaaaaa
+                    ShapeD[i][0]++;  //Dereiaaaaa
                 }
             }
-            if(dir == "IZQ"){
+            if(dir == "LEFT"){
                 for (int i = 0; i < blocks; ++i) {
-                    FormaD[i][0]--;  //Izquierdaaaaaa
+                    ShapeD[i][0]--;  //Izquierdaaaaaa
                 }
             }
-            if(dir == "ABAJO"){
+            if(dir == "DOWN"){
                 for (int i = 0; i < blocks; ++i) {
-                    FormaD[i][1]++;  //Abajoooooo
+                    ShapeD[i][1]++;  //Abajoooooo
                 }
             }
         }
