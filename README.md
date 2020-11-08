@@ -233,7 +233,7 @@ void after_line_complete(int[] lines, int completed_lines, int limit){ // Makes 
 ```
 <br>
 
-Este metodo se llama dentro del metodo `completed_lines()`. Hace que todo sobre la primera linea (de abajo hacia arriba) baje una cantidad `completed_lines` de filas.
+Este metodo se llama dentro del metodo `completed_lines()`. Hace que todo sobre la ultima fila en eliminarse baje una cantidad `completed_lines` de filas.
 <br>
 
 
