@@ -761,13 +761,13 @@ class Shape{   //Poly
 
 }
 
-class Screens{
+class Screens{ //Class used to show Scoreboard and final and starting screens
     private int bigfont, smallfont;
     private int score;
 
     public Screens(){}
 
-    void startScreen(){
+    void startScreen(){ //Creates the start screen wich disappears after player presses a key
         rect(160,160,1280,640);
         image(psyco, 320, 360, 460, 200);
         push();
@@ -779,7 +779,7 @@ class Screens{
 
     }
 
-    void showBoard(){
+    void showBoard(){ //Shows scoreboard with level and points
         rect(1120,400,240,360);
         image(psyco, 1125, 400, 230, 100);
         push();
@@ -790,7 +790,7 @@ class Screens{
         pop();
     }
 
-    void showFinalGame(){
+    void showFinalGame(){ //Creates the final screen, wich shows final points achieved by the player
         rect(160,160,1280,640);
         image(psyco, 320, 360, 460, 200);
         push();
