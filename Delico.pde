@@ -1,5 +1,7 @@
 int Size;
-int level,rows;
+int level,rows,out,dificulty,second;
+PImage psyco;
+PFont weirdfont;
 ScoreSquare scoreboard;
 Board main_board;
 Board mini_board;
@@ -7,6 +9,8 @@ Shape fig;
 Shape other;
 
 void setup() {
+    psyco = loadImage("Psycoetris.png");
+    weirdfont = loadFont("Pristina-Regular-48.vlw");
     strokeWeight(3);
     size(1600,960);
     level = 1;
@@ -27,6 +31,8 @@ void draw() {
     bottom();
     LevelToLimits(level);
     scoreboard.showBoard();
+    makelevels();
+    ScoreToLevels(main_board.points);
     textSize(20);
     fill(0);
     text("Rows"+str(rows),1000,500);
@@ -34,8 +40,29 @@ void draw() {
 
 }
 
+void makelevels(){
+    if(level <=5){
+        dificulty = level;
+    }
+}
 
-
+void ScoreToLevels(int score){
+    if(score ==200){
+        level = 2;
+    }else if (score == 700) {
+        level = 3;
+    }else if (score ==1000) {
+        level = 4;
+    }else if (score == 1400) {
+        level = 5;
+    }else if (score > 1700) {
+        second = score + 100;
+    }
+    if(score == second){
+        second = score + 100;
+        dificulty++;
+    }
+}
 void keyPressed() { // The fig object updates the main_board matrix within its methods
     if(keyCode == RIGHT){
         fig.MoveShape("RIGHT", main_board);
@@ -79,7 +106,16 @@ void keyReleased() {
                 }
             }
         }
+        for (int i = 0; i < fig.blocks; ++i) {
+            if(fig.ShapeD[i][0] > (rows-2)){
+                    out++;
+                }
+        }
+        for (int j = 0; j < out; ++j) {
+            fig.extraMove("LEFT");
+        }
         fig.rotcont++;
+        out = 0;
     }
 
     
@@ -147,9 +183,9 @@ void bottom(){
     }
 }
 
-void mousePressed(){
+/*void mousePressed(){
     level++;
-}
+}*/
 void LevelToLimits(int level){
     switch(level){
         case 1:
@@ -511,7 +547,7 @@ class Shape{
     }
 
     public void GoDown(int level){
-        if(cont%(55-level) == 0){
+        if(cont%(55-dificulty) == 0){
             MoveShape("DOWN", main_board);
         }
         cont++;
@@ -671,11 +707,16 @@ class ScoreSquare{
     private int bigfont, smallfont;
     private int score;
 
-    public ScoreSquare(){
-        score = main_board.points;
-    }
+    public ScoreSquare(){}
 
     void showBoard(){
-        rect(1120,400,500,700);
+        rect(1120,400,240,360);
+        image(psyco, 1125, 400, 230, 100);
+        push();
+        fill(0);
+        textFont(weirdfont, 50);
+        text("Score: "+str(main_board.points),1130,540);
+        text("Level: "+str(dificulty),1130,680);
+        pop();
     }
 }

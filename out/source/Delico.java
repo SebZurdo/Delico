@@ -15,7 +15,9 @@ import java.io.IOException;
 public class Delico extends PApplet {
 
 int Size;
-int level,rows;
+int level,rows,out,dificulty,second;
+PImage psyco;
+PFont weirdfont;
 ScoreSquare scoreboard;
 Board main_board;
 Board mini_board;
@@ -23,7 +25,9 @@ Shape fig;
 Shape other;
 
 public void setup() {
-    strokeWeight(5);
+    psyco = loadImage("Psycoetris.png");
+    weirdfont = loadFont("Pristina-Regular-48.vlw");
+    strokeWeight(3);
     
     level = 1;
     main_board = new Board(20, 20, 255, 80);
@@ -36,13 +40,15 @@ public void setup() {
 }
 
 public void draw() {
-    background(140);
-    main_board.display();
-    mini_board.display();
+    background(0);
+    main_board.display(rows);
+    mini_board.display(6);
     fig.GoDown(0);
     bottom();
     LevelToLimits(level);
     scoreboard.showBoard();
+    makelevels();
+    ScoreToLevels(main_board.points);
     textSize(20);
     fill(0);
     text("Rows"+str(rows),1000,500);
@@ -50,8 +56,29 @@ public void draw() {
 
 }
 
+public void makelevels(){
+    if(level <=5){
+        dificulty = level;
+    }
+}
 
-
+public void ScoreToLevels(int score){
+    if(score ==200){
+        level = 2;
+    }else if (score == 700) {
+        level = 3;
+    }else if (score ==1000) {
+        level = 4;
+    }else if (score == 1400) {
+        level = 5;
+    }else if (score > 1700) {
+        second = score + 100;
+    }
+    if(score == second){
+        second = score + 100;
+        dificulty++;
+    }
+}
 public void keyPressed() { // The fig object updates the main_board matrix within its methods
     if(keyCode == RIGHT){
         fig.MoveShape("RIGHT", main_board);
@@ -95,7 +122,16 @@ public void keyReleased() {
                 }
             }
         }
+        for (int i = 0; i < fig.blocks; ++i) {
+            if(fig.ShapeD[i][0] > (rows-2)){
+                    out++;
+                }
+        }
+        for (int j = 0; j < out; ++j) {
+            fig.extraMove("LEFT");
+        }
         fig.rotcont++;
+        out = 0;
     }
 
     
@@ -163,9 +199,9 @@ public void bottom(){
     }
 }
 
-public void mousePressed(){
+/*void mousePressed(){
     level++;
-}
+}*/
 public void LevelToLimits(int level){
     switch(level){
         case 1:
@@ -213,10 +249,17 @@ class Board{
         }
     }
 
-    public void display(){
+    public void display(int rows){
         for(int i = 0; i < y; ++i){
-            for(int j = 0; j < x; ++j){
+            for(int j = 0; j < rows; ++j){
                 fill(board_matrix[i][j]);
+                square(j * block_size + space_x, i * block_size + 80, block_size);
+            }
+        }
+
+        for(int i = 0; i < y; ++i){
+            for(int j = rows; j < x; ++j){
+                fill(0);
                 square(j * block_size + space_x, i * block_size + 80, block_size);
             }
         }
@@ -359,7 +402,7 @@ class Shape{
         switch(order){
             case 0:
                 ShapeD = M0;
-                coloration = 0xff000000;
+                coloration = 0xff13FF1C;
                 break;
             case 1:
                 ShapeD = MR;
@@ -520,7 +563,7 @@ class Shape{
     }
 
     public void GoDown(int level){
-        if(cont%(55-level) == 0){
+        if(cont%(55-dificulty) == 0){
             MoveShape("DOWN", main_board);
         }
         cont++;
@@ -680,12 +723,17 @@ class ScoreSquare{
     private int bigfont, smallfont;
     private int score;
 
-    public ScoreSquare(){
-        score = main_board.points;
-    }
+    public ScoreSquare(){}
 
     public void showBoard(){
-        rect(1040,400,500,700);
+        rect(1120,400,240,360);
+        image(psyco, 1125, 400, 230, 100);
+        push();
+        fill(0);
+        textFont(weirdfont, 50);
+        text("Score: "+str(main_board.points),1130,540);
+        text("Level: "+str(dificulty),1130,680);
+        pop();
     }
 }
   public void settings() {  size(1600,960); }
