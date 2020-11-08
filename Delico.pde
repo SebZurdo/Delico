@@ -6,14 +6,15 @@ Board main_board;
 Board mini_board;
 Shape fig;
 Shape other;
+
 void setup() {
     strokeWeight(5);
     size(1600,960);
     n = 20;
     main_board = new Board(20, n, 255, 80);
     mini_board = new Board(5, 5, 255, 1120);
-    other = new Shape(5);
-    fig = new Shape(5);
+    other = new Shape(1);
+    fig = new Shape(1);
     fig.Moving = true;
 }
 
@@ -23,9 +24,6 @@ void draw() {
     mini_board.display();
     fig.GoDown(0);
     bottom();
-    textSize(20);
-    fill(0);
-    text("rotcont"+str(fig.rotcont%4),1000,500);
 
 }
 
@@ -131,8 +129,10 @@ void bottom(){
         fig = other;
         fig.Moving = true;
         other = new Shape(5);
+        main_board.completed_lines(20);
     }
 }
+
 class Board{
 
     private color[][] board_matrix;
@@ -141,6 +141,7 @@ class Board{
     private int x;
     private int block_size;
     private int space_x;
+    private int points;
 
     Board(int matrix_lines, int matrix_columns, color color_b, int space) {
         board_matrix = new color[matrix_lines][matrix_columns];
@@ -149,6 +150,8 @@ class Board{
         y = matrix_lines;
         x = matrix_columns;
         space_x = space;
+        points = 0;
+
         for(int i = 0; i < y; ++i){
             for(int j = 0; j < x; ++j){
                 board_matrix[i][j] = board_color; 
@@ -164,6 +167,69 @@ class Board{
             }
         }
     }
+
+    void completed_lines(int limit){
+        color block_color; // Variable that stores the color of the initial block of a line
+        int completed_lines = 0;
+        boolean completed_line = true;
+
+        int[] lines = new int[20]; // Array that stores the completed lines
+        int auxiliar_index = 0;
+
+        for(int i = 0; i < 20; ++i){
+            block_color = board_matrix[i][0];
+
+            if(block_color != board_color)
+            {
+                for(int j = 1; j < limit; ++j){
+                    if(board_matrix[i][j] == board_color)
+                    {
+                        completed_line = false;
+                        break;
+                    }
+                }
+
+                if(completed_line){
+                    lines[auxiliar_index] = i;
+                    ++completed_lines;
+                    ++auxiliar_index; 
+                }
+            }
+
+            completed_line = true;
+
+        }
+
+        auxiliar_index = 0;
+
+        for(int i = 0; i < completed_lines; ++i){
+            for(int j = 0; j < limit; ++j){
+                board_matrix[lines[i]][j] = board_color;
+            }
+        }
+
+        points += 100 * completed_lines;
+        after_line_complete(lines, completed_lines, limit); 
+    }
+
+    void after_line_complete(int[] lines, int completed_lines, int limit){ // Makes that everything falls again after a line or lines disappear
+        int first_line = lines[0];
+
+        for(int i = 1; i < completed_lines; ++i){
+             if(lines[i] < first_line){
+                first_line = lines[i];
+            }
+        }
+
+        for(int i = first_line - 1; i >= 0; --i){
+            for(int j = 0; j < limit; ++j){
+                board_matrix[i + completed_lines][j] = board_matrix[i][j];
+                board_matrix[i][j] = board_color;
+            }
+        }
+
+    }
+
 }
 class Shape{
     //Monomino//
