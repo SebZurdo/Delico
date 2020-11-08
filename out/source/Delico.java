@@ -53,7 +53,16 @@ public void setup() {
 }
 
 public void draw() {
-    background(v_1 * 1, v_2 * 1, v_3 *1);  
+    if(level == 5 && PApplet.parseInt(random(1, 3)) % 2 == 0){
+        v_1 = PApplet.parseInt(random(255));
+        v_2 = PApplet.parseInt(random(255));
+        v_3 = PApplet.parseInt(random(255));
+
+        background(v_1 * 1, v_2 * 1, v_3 *1); 
+    }
+    else{
+    background(v_1 * 1, v_2 * 1, v_3 *1);
+    }   
     main_board.display(rows, v_1, v_2, v_3);
     mini_board.display(6, 0, 0, 0);
     fig.GoDown(0);
@@ -73,7 +82,7 @@ public void ScoreToLevels(int score){
         level = 3;
     }else if (score ==800) {
         level = 4;
-    }else if (score >= 1800) {
+    }else if (score >= 1400) {
         level = 5;
     }
     if(level < 5){
@@ -83,7 +92,6 @@ public void ScoreToLevels(int score){
 
 public boolean gameover(){
     if(!fig.Moving){
-        
             return true;
     } return false;
 }
