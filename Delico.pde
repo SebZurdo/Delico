@@ -23,30 +23,45 @@ void draw() {
     mini_board.display();
     fig.GoDown(0);
     bottom();
+    textSize(20);
+    fill(0);
+    text("rotcont"+str(fig.rotcont%4),1000,500);
+
 }
 
 void HandleSidesR(){
     try{
-        fig.extraMove("LEFT");
-        for(int i = 0; i < fig.blocks; ++i){
-            main_board.board_matrix[fig.ShapeD[i][1]][fig.ShapeD[i][0]] = fig.coloration;
+        for(int k = 0; k < fig.blocks; ++k){
+            main_board.board_matrix[fig.ShapeD[k][1]][fig.ShapeD[k][0]] = 255;
+        }
+        fig.rotate();
+        fig.rotate();
+        fig.rotcont = fig.rotcont -1;
+        fig.rotcont = fig.rotcont + 1;
+        for(int k = 0; k < fig.blocks; ++k){
+            main_board.board_matrix[fig.ShapeD[k][1]][fig.ShapeD[k][0]] = fig.coloration;
         }
     } catch (Exception e) {
+        fig.extraMove("LEFT");
         HandleSidesR();
     }
 }
 
 void HandleSidesL(){
     try{
-        fig.extraMove("RIGHT");
-        for(int i = 0; i < fig.blocks; ++i){
-            main_board.board_matrix[fig.ShapeD[i][1]][fig.ShapeD[i][0]] = fig.coloration;
+        for(int k = 0; k < fig.blocks; ++k){
+            main_board.board_matrix[fig.ShapeD[k][1]][fig.ShapeD[k][0]] = 255;
+        }
+        fig.rotate();
+        fig.rotate();
+        fig.rotcont = fig.rotcont -1;
+        fig.rotcont = fig.rotcont + 1;
+        for(int k = 0; k < fig.blocks; ++k){
+            main_board.board_matrix[fig.ShapeD[k][1]][fig.ShapeD[k][0]] = fig.coloration;
         }
     } catch (Exception e) {
+        fig.extraMove("RIGHT");
         HandleSidesL();
-        for(int j = 0; j < fig.blocks; ++j){
-            main_board.board_matrix[fig.ShapeD[j][1]][fig.ShapeD[j][0]] = fig.coloration;
-        }
     }
 }
 
@@ -79,33 +94,34 @@ void keyReleased() {
     for(int i = 0; i < fig.blocks; ++i){ // Here updates its position like in the Moveshape method
         main_board.board_matrix[fig.ShapeD[i][1]][fig.ShapeD[i][0]] = 255;
     }
-
+    
     if(keyCode == UP){
-        fig.rotate();
-        fig.rotate();
+        try{
+            fig.rotate();
+            fig.rotate();
+            for(int i = 0; i < fig.blocks; ++i){ // Here updates its position like in the Moveshape method
+                main_board.board_matrix[fig.ShapeD[i][1]][fig.ShapeD[i][0]] = 255;
+            }
+        } catch (Exception e) {
+            for (int i = 0; i < fig.blocks; ++i) {
+                if(fig.ShapeD[i][0] > int(n/2)){
+                    HandleSidesR();
+                    break;
+                }
+            }
+            for (int i = 0; i < fig.blocks; ++i) {
+                if(fig.ShapeD[i][0] < int(n/2)){
+                    HandleSidesL();
+                    break;
+                }
+            }
+        }
+        fig.rotcont++;
     }
-    fig.rotcont++;
 
-    try {
-        for(int i = 0; i < fig.blocks; ++i){
-            main_board.board_matrix[fig.ShapeD[i][1]][fig.ShapeD[i][0]] = fig.coloration;
-        }
-    } catch(Exception e){
-        for (int i = 0; i < fig.blocks; ++i) {
-            if(fig.ShapeD[i][0] > int(n/2)){
-                HandleSidesR();
-                break;
-            }
-        }
-        for (int i = 0; i < fig.blocks; ++i) {
-            if(fig.ShapeD[i][0] < 7){
-                HandleSidesL();
-                break;
-            }
-        }
-        for(int j = 0; j < fig.blocks; ++j){
-            main_board.board_matrix[fig.ShapeD[j][1]][fig.ShapeD[j][0]] = fig.coloration;
-        }
+    
+    for(int i = 0; i < fig.blocks; ++i){
+        main_board.board_matrix[fig.ShapeD[i][1]][fig.ShapeD[i][0]] = fig.coloration;
     }
 
 }
@@ -243,7 +259,7 @@ class Shape{
                 break;
             case 7:
                 ShapeD = eleL;
-                coloration = #999999;
+                coloration = #66c285;
                 break;
             case 8:
                 ShapeD = eleD;
@@ -343,7 +359,7 @@ class Shape{
         }
         cont = 1;
         OS = ShapeD;
-        rotcont = 0;
+        rotcont = 1;
     }
 
     public void rotate(){
@@ -351,27 +367,26 @@ class Shape{
             int[][] rotated = new int[blocks][2];
             if (rotcont % 4 == 0) {
                 for (int i = 0; i < blocks; ++i) {
+                    rotated[i][0] = OS[i][0] - ShapeD[1][0];
+                    rotated[i][1] = OS[i][1] - ShapeD[1][1];
+                }
+            }else if (rotcont % 4 == 1) {
+                for (int i = 0; i < blocks; ++i) {
                     rotated[i][0] = -OS[i][1] - ShapeD[1][0];
                     rotated[i][1] = OS[i][0] - ShapeD[1][1];
                 }
-            }else if (rotcont % 4 == 1) {
+            }else if (rotcont % 4 == 2) {
                 for (int i = 0; i < blocks; ++i) {
                     rotated[i][0] = -OS[i][0] - ShapeD[1][0];
                     rotated[i][1] = -OS[i][1] - ShapeD[1][1];
                 }
-            }else if (rotcont % 4 == 2) {
+            
+            }else if (rotcont % 4 == 3) {
                 for (int i = 0; i < blocks; ++i) {
                     rotated[i][0] = OS[i][1] - ShapeD[1][0];
                     rotated[i][1] = -OS[i][0] - ShapeD[1][1];
                 }
-            
-            }else if (rotcont % 4 == 3) {
-                for (int i = 0; i < blocks; ++i) {
-                    rotated[i][0] = OS[i][0] - ShapeD[1][0];
-                    rotated[i][1] = OS[i][1] - ShapeD[1][1];
-                }
             }
-
             ShapeD = rotated;
         }
     }
