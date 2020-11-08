@@ -6,7 +6,7 @@ int Size;
 int level,rows,out,dificulty;
 PImage psyco; // Psyco-etris Image loaded as the font wasn't loadable from Processing
 PFont weirdfont; // Processing-loadable font used for score and level
-ScoreSquare scoreboard;
+Screens multiboard;
 Board main_board; //Creation of two boards, main is the playable one, while mini is the one where the other/next shape is shown
 Board mini_board;
 Shape fig;  //Creation of two shape classes to show next piece and print the shape into the board
@@ -16,7 +16,10 @@ int v_1 = 0;
 int v_2 = 0; //Variables to make the background change into different colors when player reaches level 5
 int v_3 = 0;
 
+boolean over, start; //Boolean used to stop the game once the player has lost
+
 void setup() {
+    start = true;
     path = sketchPath(audioname);
     file = new SoundFile(this, path); // Music setup
     file.play();
@@ -29,7 +32,7 @@ void setup() {
     mini_board = new Board(6, 6, 255, 1120);
     other = new Shape(level);        
     fig = new Shape(level);
-    scoreboard = new ScoreSquare();
+    multiboard = new Screens();
     fig.Moving = true;
     other.inject(mini_board, level); //Injects the "other" shape into the miniboard
 }
@@ -44,15 +47,25 @@ void draw() {
     }
     else{
     background(v_1 * 1, v_2 * 1, v_3 *1);
-    }   
-    main_board.display(rows, v_1, v_2, v_3);
-    mini_board.display(6, 0, 0, 0);
-    fig.GoDown(0);
-    bottom();
-    LevelToLimits(level);
-    scoreboard.showBoard();
-    ScoreToLevels(main_board.points);
-    gameover();
+
+    }  
+    if(!start){
+        main_board.display(rows, v_1, v_2, v_3);
+        mini_board.display(6, 0, 0, 0);
+        fig.GoDown(0);
+        bottom();
+        LevelToLimits(level);
+        multiboard.showBoard();
+        ScoreToLevels(main_board.points);
+    }else{
+        multiboard.startScreen();
+    }
+    if (over) {
+        multiboard.showFinalGame();
+    }
+    
+
+    
 
 }
 
@@ -64,7 +77,7 @@ void ScoreToLevels(int score){  //Converts the Board system points into Game sys
         level = 3;
     }else if (score ==800) {
         level = 4;
-    }else if (score >= 1400) {
+    }else if (score >= 1800) {
         level = 5;
     }
     if(level < 5){
@@ -84,6 +97,10 @@ void keyPressed() { // The fig object updates the main_board matrix within its m
     }
 }
 void keyReleased() {
+
+    if(start){
+        start = false;
+    }
     for(int i = 0; i < fig.blocks; ++i){ // Here updates its position like in the Moveshape method
         main_board.board_matrix[fig.ShapeD[i][1]][fig.ShapeD[i][0]] = 255;
     }
@@ -187,17 +204,19 @@ void bottom(){
         v_2 = int(random(255));
         v_3 = int(random(255));
 
+        gameover(fig, main_board, mini_board);
         fig = other;
         fig.Moving = true; //Shape stops moving downwards, so it turns into "other"/next piece and other recieves a new shape (and atattributes)
         other = new Shape(level);
         main_board.completed_lines(rows, level);
         mini_board.clean();
         other.inject(mini_board, level);
+
+        
     }
 }
 
-
-void LevelToLimits(int level){  //Converts level to row number, allowing the board to grow depending on the level
+void LevelToLimits(int level){
     switch(level){
         case 1:
             rows = 4;
@@ -214,6 +233,30 @@ void LevelToLimits(int level){  //Converts level to row number, allowing the boa
         case 5:
             rows = 20;
             break; 
+    }
+}
+
+void gameover(Shape fig, Board main_board, Board mini_board){
+    for(int i = 0; i < fig.blocks; ++i){
+        if(fig.ShapeD[i][1] == 0){
+            background(0);
+
+            for(int y_1 = 0; y_1 < main_board.y; ++y_1){
+                for(int x_1 = 0; x_1 < main_board.x; ++x_1){
+                    main_board.board_matrix[y_1][x_1] = 0;
+                }
+            }
+
+            for(int y_2 = 0; y_2 < mini_board.y; ++y_2){
+                for(int x_2 = 0; x_2 < main_board.x; ++x_2){
+                    main_board.board_matrix[y_2][x_2] = 0;
+                }
+            }
+            over = true;
+            noLoop();
+
+            // Aqui un ciclo infinito, si se presiona cierta tecla no se reiniciar el juego si quiere, si no pues solo tendría que borrar el rectangulo de puntaje y poner un letrero de puntaje final y sha
+        }
     }
 }
 
@@ -338,7 +381,7 @@ class Board{
     }
 
 }
-class Shape{
+class Shape{   //Poly
     //Monominoe//
     private int[][] M0 = {{0,0}};
     //Binominoe//
@@ -381,7 +424,7 @@ class Shape{
     private int cont, rotcont;
     private int limit;
     private int blocks;
-    public Shape(int lvl){ //Constructor recieves level, putting a limit on wich kind of polyminoes can spawn
+    public Shape(int lvl){ //Constructor recieves level, putting a limit on wich kind of Polyominoes can spawn
         switch(level){
             case 1:
                 limit = 1;
@@ -718,11 +761,23 @@ class Shape{
 
 }
 
-class ScoreSquare{
+class Screens{
     private int bigfont, smallfont;
     private int score;
 
-    public ScoreSquare(){}
+    public Screens(){}
+
+    void startScreen(){
+        rect(160,160,1280,640);
+        image(psyco, 320, 360, 460, 200);
+        push();
+        fill(0);
+        textFont(weirdfont, 50);
+        text("Welcome!",960,440);
+        text("Press any key to play",960,500);
+        pop();
+
+    }
 
     void showBoard(){
         rect(1120,400,240,360);
@@ -732,7 +787,17 @@ class ScoreSquare{
         textFont(weirdfont, 50);
         text("Score: "+str(main_board.points),1130,540);
         text("Level: "+str(dificulty),1130,680);
-        text("Gameover: "+str(gameover()),1130,700);
+        pop();
+    }
+
+    void showFinalGame(){
+        rect(160,160,1280,640);
+        image(psyco, 320, 360, 460, 200);
+        push();
+        fill(0);
+        textFont(weirdfont, 50);
+        text("Final Score: "+str(main_board.points-2000)+" !",960,440);
+        text("Thanks for playing!",960,500);
         pop();
     }
 }
