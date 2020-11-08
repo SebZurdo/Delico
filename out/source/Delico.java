@@ -40,6 +40,45 @@ public void draw() {
     bottom();
 }
 
+public void HandleSidesR(){
+    try{
+        fig.extraMove("LEFT");
+        for(int i = 0; i < fig.blocks; ++i){
+            main_board.board_matrix[fig.ShapeD[i][1]][fig.ShapeD[i][0]] = fig.coloration;
+        }
+    } catch (Exception e) {
+        HandleSidesR();
+    }
+}
+
+public void HandleSidesL(){
+    try{
+        fig.extraMove("RIGHT");
+        for(int i = 0; i < fig.blocks; ++i){
+            main_board.board_matrix[fig.ShapeD[i][1]][fig.ShapeD[i][0]] = fig.coloration;
+        }
+    } catch (Exception e) {
+        HandleSidesL();
+        for(int j = 0; j < fig.blocks; ++j){
+            main_board.board_matrix[fig.ShapeD[j][1]][fig.ShapeD[j][0]] = fig.coloration;
+        }
+    }
+}
+
+public void HandleSidesD(){
+    try{
+        fig.extraMove("UP");
+        for(int i = 0; i < fig.blocks; ++i){
+            main_board.board_matrix[fig.ShapeD[i][1]][fig.ShapeD[i][0]] = fig.coloration;
+        }
+    } catch (Exception e) {
+        HandleSidesD();
+        for(int j = 0; j < fig.blocks; ++j){
+            main_board.board_matrix[fig.ShapeD[j][1]][fig.ShapeD[j][0]] = fig.coloration;
+        }
+    }
+}
+
 public void keyPressed() { // The fig object updates the main_board matrix within its methods
     if(keyCode == RIGHT){
         fig.MoveShape("RIGHT", main_board);
@@ -58,13 +97,31 @@ public void keyReleased() {
 
     if(keyCode == UP){
         fig.rotate();
-        fig.rotate();
     }
     fig.rotcont++;
 
-    for(int i = 0; i < fig.blocks; ++i){
-        main_board.board_matrix[fig.ShapeD[i][1]][fig.ShapeD[i][0]] = fig.coloration;
+    try {
+        for(int i = 0; i < fig.blocks; ++i){
+            main_board.board_matrix[fig.ShapeD[i][1]][fig.ShapeD[i][0]] = fig.coloration;
+        }
+    } catch(Exception e){
+        for (int i = 0; i < fig.blocks; ++i) {
+            if(fig.ShapeD[i][0] > PApplet.parseInt(n/2)){
+                HandleSidesR();
+                break;
+            }
+        }
+        for (int i = 0; i < fig.blocks; ++i) {
+            if(fig.ShapeD[i][0] < 7){
+                HandleSidesL();
+                break;
+            }
+        }
+        for(int j = 0; j < fig.blocks; ++j){
+            main_board.board_matrix[fig.ShapeD[j][1]][fig.ShapeD[j][0]] = fig.coloration;
+        }
     }
+
 }
 
 public void bottom(){
@@ -82,7 +139,6 @@ class Board{
     private int x;
     private int block_size;
     private int space_x;
-    private int laX,laY;
 
     Board(int matrix_lines, int matrix_columns, int color_b, int space) {
         board_matrix = new int[matrix_lines][matrix_columns];
@@ -91,7 +147,6 @@ class Board{
         y = matrix_lines;
         x = matrix_columns;
         space_x = space;
-
         for(int i = 0; i < y; ++i){
             for(int j = 0; j < x; ++j){
                 board_matrix[i][j] = board_color; 
@@ -143,7 +198,7 @@ class Shape{
     private int[][] Y2 = {{0,0},{0,1},{1,1},{0,2},{0,3}};
     private int[][] Z1 = {{0,0},{1,0},{1,1},{1,2},{2,2}};
     private int[][] Z2 = {{1,0},{2,0},{1,1},{1,2},{0,2}};
-    //
+    
     private int[][] ShapeD, OS;
     private int coloration, order;
     private boolean Moving;
@@ -400,6 +455,30 @@ class Shape{
 
         for(int i = 0; i < blocks; ++i){ // Updates its current position in the main_board
             main_board.board_matrix[ShapeD[i][1]][ShapeD[i][0]] = coloration;
+        }
+    }
+    public void extraMove(String dir){
+        if(dir == "UP"){
+            for (int i = 0; i < blocks; ++i) {
+                ShapeD[i][1]--;  //UP
+            }
+        }
+        if(Limit(dir)){
+            if(dir == "RIGHT"){
+                for (int i = 0; i < blocks; ++i) {
+                    ShapeD[i][0]++;  //Dereiaaaaa
+                }
+            }
+            if(dir == "LEFT"){
+                for (int i = 0; i < blocks; ++i) {
+                    ShapeD[i][0]--;  //Izquierdaaaaaa
+                }
+            }
+            if(dir == "DOWN"){
+                for (int i = 0; i < blocks; ++i) {
+                    ShapeD[i][1]++;  //Abajoooooo
+                }
+            }
         }
     }
 
