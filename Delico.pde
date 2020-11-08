@@ -7,7 +7,7 @@ Shape fig;
 Shape other;
 
 void setup() {
-    strokeWeight(5);
+    strokeWeight(3);
     size(1600,960);
     level = 1;
     main_board = new Board(20, 20, 255, 80);
@@ -20,9 +20,9 @@ void setup() {
 }
 
 void draw() {
-    background(140);
-    main_board.display();
-    mini_board.display();
+    background(0);
+    main_board.display(rows);
+    mini_board.display(6);
     fig.GoDown(0);
     bottom();
     LevelToLimits(level);
@@ -197,10 +197,17 @@ class Board{
         }
     }
 
-    void display(){
+    void display(int rows){
         for(int i = 0; i < y; ++i){
-            for(int j = 0; j < x; ++j){
+            for(int j = 0; j < rows; ++j){
                 fill(board_matrix[i][j]);
+                square(j * block_size + space_x, i * block_size + 80, block_size);
+            }
+        }
+
+        for(int i = 0; i < y; ++i){
+            for(int j = rows; j < x; ++j){
+                fill(0);
                 square(j * block_size + space_x, i * block_size + 80, block_size);
             }
         }
@@ -343,7 +350,7 @@ class Shape{
         switch(order){
             case 0:
                 ShapeD = M0;
-                coloration = #000000;
+                coloration = #13FF1C;
                 break;
             case 1:
                 ShapeD = MR;
