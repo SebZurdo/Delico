@@ -1,9 +1,7 @@
 import processing.sound.*;
-
 SoundFile file;
 String audioname = "Astrix.mp3"; //Music setup
 String path;
-
 int Size;
 int level,rows,out,dificulty;
 PImage psyco;
@@ -22,8 +20,6 @@ void setup() {
     path = sketchPath(audioname);
     file = new SoundFile(this, path); // Music setup
     file.play();
-
-
     psyco = loadImage("Psycoetris.png");
     weirdfont = loadFont("Pristina-Regular-48.vlw");
     strokeWeight(3);
@@ -48,8 +44,12 @@ void draw() {
     }
     else{
     background(v_1 * 1, v_2 * 1, v_3 *1);
+<<<<<<< HEAD
     }  
     
+=======
+    }   
+>>>>>>> 416c18cfa08298bb001dd3c06e600dba4813fe25
     main_board.display(rows, v_1, v_2, v_3);
     mini_board.display(6, 0, 0, 0);
     fig.GoDown(0);
@@ -77,11 +77,6 @@ void ScoreToLevels(int score){
     }
 }
 
-boolean gameover(){
-    if(!fig.Moving){
-            return true;
-    } return false;
-}
 void keyPressed() { // The fig object updates the main_board matrix within its methods
     if(keyCode == RIGHT){
         fig.MoveShape("RIGHT", main_board);
