@@ -39,7 +39,16 @@ void setup() {
 }
 
 void draw() {
-    background(v_1 * 1, v_2 * 1, v_3 *1);  
+    if(level == 5 && int(random(1, 3)) % 2 == 0){
+        v_1 = int(random(255));
+        v_2 = int(random(255));
+        v_3 = int(random(255));
+
+        background(v_1 * 1, v_2 * 1, v_3 *1); 
+    }
+    else{
+    background(v_1 * 1, v_2 * 1, v_3 *1);
+    }  
     
     main_board.display(rows, v_1, v_2, v_3);
     mini_board.display(6, 0, 0, 0);
@@ -65,7 +74,7 @@ void ScoreToLevels(int score){
         level = 3;
     }else if (score ==800) {
         level = 4;
-    }else if (score >= 1800) {
+    }else if (score >= 1400) {
         level = 5;
     }
 }
