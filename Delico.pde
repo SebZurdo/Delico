@@ -254,6 +254,8 @@ void gameover(Shape fig, Board main_board, Board mini_board){
             }
             over = true;
             noLoop();
+
+            // Aqui un ciclo infinito, si se presiona cierta tecla no se reiniciar el juego si quiere, si no pues solo tendría que borrar el rectangulo de puntaje y poner un letrero de puntaje final y sha
         }
     }
 }
@@ -262,12 +264,12 @@ void gameover(Shape fig, Board main_board, Board mini_board){
 class Board{
 
     private color[][] board_matrix;
-    private color board_color;
-    private int y;
-    private int x;
+    private color board_color; //Initial board color
+    private int y; // Lines
+    private int x; // Columns
     private int block_size;
-    private int space_x;
-    private int points;
+    private int space_x; // Space from the left border
+    private int points; // Game score
 
     Board(int matrix_lines, int matrix_columns, color color_b, int space) {
         board_matrix = new color[matrix_lines][matrix_columns];
@@ -285,7 +287,7 @@ class Board{
         }
     }
 
-    void display(int rows, int v_1, int v_2, int v_3){
+    void display(int rows, int v_1, int v_2, int v_3){ // Displays the board according to the limit of what we want to display
         for(int i = 0; i < y; ++i){
             for(int j = 0; j < rows; ++j){
                 fill(board_matrix[i][j]);
@@ -304,7 +306,7 @@ class Board{
         }
     }
 
-    void clean(){
+    void clean(){ // Cleans the board
         for(int i = 0; i < y; ++i){
             for(int j = 0; j < x; ++j){
                 board_matrix[i][j] = board_color;
@@ -312,7 +314,7 @@ class Board{
         }
     }
 
-    void completed_lines(int limit, int level){
+    void completed_lines(int limit, int level){ // Checks and erases the completed lines and also updates the score
         color block_color; // Variable that stores the color of the initial block of a line
         int completed_lines = 0;
         boolean completed_line = true;
