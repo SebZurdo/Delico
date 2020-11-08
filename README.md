@@ -971,6 +971,127 @@ Permite mover un polyomino cuando se sale por abajo e inyectar sus coordenadas a
 
 <br>
 
+### `ScoreToLevels()`
+<br>
+
+````java
+
+void ScoreToLevels(int score){  //Converts the Board system points into Game system points
+    if(score ==200){
+        level = 2;
+    }else if (score == 500) {
+        level = 3;
+    }else if (score ==800) {
+        level = 4;
+    }else if (score >= 1800) {
+        level = 5;
+    }
+    if(level < 5){
+        dificulty = level;
+    }
+}
+
+````
+<br>
+
+Convierte los puntos almacenados por el tablero de juego a nivel del juego.
+
+<br>
+
+### `bottom()`
+<br>
+
+````javavoid bottom(){
+    if (!fig.Moving) {
+        v_1 = int(random(255));
+        v_2 = int(random(255));
+        v_3 = int(random(255));
+
+        gameover(fig, main_board, mini_board);
+        fig = other;
+        fig.Moving = true; //Shape stops moving downwards, so it turns into "other"/next piece and other recieves a new shape (and atattributes)
+        other = new Shape(level);
+        main_board.completed_lines(rows, level);
+        mini_board.clean();
+        other.inject(mini_board, level);
+
+        
+    }
+}
+
+````
+<br>
+
+Esta función se llama para verificar si una figura ya ha terminado de caer. Dentro de esta se establece tambien el fondo que cambia cada vez que cae una figura cuando esta en un nivel de juego menor al quinto, además que aquí tambien verifica el `game_over()`, se actualiza el tablero pequeño y se crea la nueva figura a caer.
+
+<br>
+
+### `LevelToLimits()`
+<br>
+
+````java
+void LevelToLimits(int level){
+    switch(level){
+        case 1:
+            rows = 4;
+            break;
+        case 2:
+            rows = 6;
+            break;
+        case 3:
+            rows = 8;
+            break;
+        case 4:
+            rows = 10;
+            break;
+        case 5:
+            rows = 20;
+            break; 
+    }
+}
+````
+<br>
+
+Cambia el limite de movimiento y del tablero de juego dependiendo del nivel.
+
+<br>
+
+### `game_over()`
+<br>
+
+````java
+void gameover(Shape fig, Board main_board, Board mini_board){
+    for(int i = 0; i < fig.blocks; ++i){
+        if(fig.ShapeD[i][1] == 0){
+            background(0);
+
+            for(int y_1 = 0; y_1 < main_board.y; ++y_1){
+                for(int x_1 = 0; x_1 < main_board.x; ++x_1){
+                    main_board.board_matrix[y_1][x_1] = 0;
+                }
+            }
+
+            for(int y_2 = 0; y_2 < mini_board.y; ++y_2){
+                for(int x_2 = 0; x_2 < main_board.x; ++x_2){
+                    main_board.board_matrix[y_2][x_2] = 0;
+                }
+            }
+            over = true;
+            noLoop();
+
+        }
+    }
+}
+````
+<br>
+
+Prepara la ventana para mostrar la pantalla de game over, pintando tanto el fondo como ambos tableros de negro y deteniendo el flujo `draw()`.
+
+<br>
+
+
+
+
 
 
 
