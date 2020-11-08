@@ -44,12 +44,9 @@ void draw() {
     }
     else{
     background(v_1 * 1, v_2 * 1, v_3 *1);
-<<<<<<< HEAD
+
     }  
     
-=======
-    }   
->>>>>>> 416c18cfa08298bb001dd3c06e600dba4813fe25
     main_board.display(rows, v_1, v_2, v_3);
     mini_board.display(6, 0, 0, 0);
     fig.GoDown(0);
