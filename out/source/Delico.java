@@ -3,6 +3,8 @@ import processing.data.*;
 import processing.event.*; 
 import processing.opengl.*; 
 
+import processing.sound.*; 
+
 import java.util.HashMap; 
 import java.util.ArrayList; 
 import java.io.File; 
@@ -14,6 +16,10 @@ import java.io.IOException;
 
 public class Delico extends PApplet {
 
+
+SoundFile file;
+String audioname = "Astrix.mp3"; //Music setup
+String path;
 int Size;
 int level,rows,out,dificulty;
 PImage psyco;
@@ -29,6 +35,9 @@ int v_2 = 0;
 int v_3 = 0;
 
 public void setup() {
+    path = sketchPath(audioname);
+    file = new SoundFile(this, path); // Music setup
+    file.play();
     psyco = loadImage("Psycoetris.png");
     weirdfont = loadFont("Pristina-Regular-48.vlw");
     strokeWeight(3);
@@ -52,6 +61,7 @@ public void draw() {
     LevelToLimits(level);
     scoreboard.showBoard();
     ScoreToLevels(main_board.points);
+    gameover();
 
 }
 
@@ -59,21 +69,23 @@ public void draw() {
 public void ScoreToLevels(int score){
     if(score ==200){
         level = 2;
-    }else if (score == 700) {
+    }else if (score == 500) {
         level = 3;
     }else if (score ==800) {
         level = 4;
-    }else if (score == 900) {
-        level = 5;
-    }else if (score > 1000) {
+    }else if (score >= 1800) {
         level = 5;
     }
     if(level < 5){
         dificulty = level;
     }
 }
-public void mousePressed(){
-    dificulty++;
+
+public boolean gameover(){
+    if(!fig.Moving){
+        
+            return true;
+    } return false;
 }
 public void keyPressed() { // The fig object updates the main_board matrix within its methods
     if(keyCode == RIGHT){
@@ -193,7 +205,7 @@ public void bottom(){
         fig = other;
         fig.Moving = true;
         other = new Shape(level);
-        main_board.completed_lines(rows);
+        main_board.completed_lines(rows, level);
         mini_board.clean();
         other.inject(mini_board, level);
     }
@@ -276,7 +288,7 @@ class Board{
         }
     }
 
-    public void completed_lines(int limit){
+    public void completed_lines(int limit, int level){
         int block_color; // Variable that stores the color of the initial block of a line
         int completed_lines = 0;
         boolean completed_line = true;
@@ -318,6 +330,10 @@ class Board{
 
         points += 100 * completed_lines;
         after_line_complete(lines, completed_lines, limit); 
+
+        if(level == 5 && completed_lines > 0){
+            dificulty += 1;
+        }
     }
 
     public void after_line_complete(int[] lines, int completed_lines, int limit){ // Makes that everything falls again after a line or lines disappear
@@ -736,6 +752,7 @@ class ScoreSquare{
         textFont(weirdfont, 50);
         text("Score: "+str(main_board.points),1130,540);
         text("Level: "+str(dificulty),1130,680);
+        text("Gameover: "+str(gameover()),1130,700);
         pop();
     }
 }
