@@ -5,6 +5,8 @@ Board mini_board;
 Shape fig;
 Shape other;
 
+int v_1, v_2, v_3;
+
 void setup() {
     strokeWeight(3);
     size(1600,960);
@@ -18,7 +20,18 @@ void setup() {
 }
 
 void draw() {
-    background(0);
+    if(level == 5){
+        v_1 = int(random(255));
+        v_2 = int(random(255));
+        v_3 = int(random(255));
+
+        background(v_1 * 1, v_2 * 1, v_3 *1); 
+    }
+    
+    else{
+        background(0);
+    }
+
     main_board.display(rows);
     mini_board.display(6);
     fig.GoDown(0);
@@ -30,8 +43,6 @@ void draw() {
     text("Blocks"+str(fig.blocks),1000,515);
 
 }
-
-
 
 void keyPressed() { // The fig object updates the main_board matrix within its methods
     if(keyCode == RIGHT){
