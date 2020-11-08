@@ -23,5 +23,579 @@ Esta versión modificada del Tetris comenzará con monominos y la cantidad de bl
 
 <br>
 
-Use las teclas de flechas para (Derecha, Izquierda, Abajo) para mover la figura que cae, y use la tecla de flecha (Arriba) para rotarla. 
+Use las teclas de flechas para (Derecha, Izquierda, Abajo) para mover la figura que cae, y use la tecla de flecha (Arriba) para rotarla.
 
+
+____
+
+## **Shape**
+<br>
+
+Esta se encargará de todo lo relacionado con las formas que estarán dentro del juego, bien sea movimiento, posición y características, esta tomoará como variables a los [Polyominos](https://es.wikipedia.org/wiki/Poliomin%C3%B3) que irán apareciendo en la parte superior izquierda del tablero.
+
+<br>
+
+## *Polyominos*
+<br>
+
+````java
+class Shape{
+    //Monominoe//
+    private int[][] M0 = {{0,0}};
+    //Binominoe//
+    private int[][] MR = {{0,0},{0,1}};
+    //Triminoes//
+    private int[][] C0 = {{0,0},{1,0},{0,1}};
+    private int[][] R0 = {{0,0},{0,1},{0,2}};
+    //Tetronimoes//
+    private int[][] drado = {{0,0},{1,0},{0,1},{1,1}};
+    private int[][] line = {{0,0},{1,0},{2,0},{3,0},};
+    private int[][] treh = {{0,0},{1,0},{2,0},{2,1}};
+    private int[][] eleL = {{0,0},{0,1},{1,0},{2,0}};
+    private int[][] eleD = {{0,0},{1,0},{2,0},{2,1}};
+    private int[][] S1 = {{0,0},{1,0},{1,1},{2,1}};
+    private int[][] S2 = {{0,1},{1,1},{1,0},{2,0}};
+    //Pentominoes//
+    private int[][] F1 = {{1,0},{2,0},{0,1},{1,1},{1,2}};
+    private int[][] F2 = {{0,0},{1,0},{1,1},{2,1},{1,2}};
+    private int[][] line2 = {{0,0},{1,0},{2,0},{3,0},{4,0}};
+    private int[][] L1 = {{0,0},{0,1},{0,2},{0,3},{1,3}};
+    private int[][] L2 = {{0,3},{1,3},{1,2},{1,1},{1,0}};
+    private int[][] N1 = {{1,0},{1,1},{0,1},{0,2},{0,3}};
+    private int[][] N2 = {{0,0},{0,1},{1,1},{1,2},{1,3}};
+    private int[][] P1 = {{1,0},{0,1},{1,1},{0,2},{1,2}};
+    private int[][] P2 = {{0,0},{0,1},{1,1},{0,2},{1,2}};
+    private int[][] T0 = {{0,0},{1,0},{2,0},{1,1},{1,2}};
+    private int[][] U0 = {{0,0},{2,0},{0,1},{1,1},{2,1}};
+    private int[][] V0 = {{0,0},{0,1},{0,2},{1,2},{2,2}};
+    private int[][] W0 = {{0,0},{0,1},{1,1},{1,2},{2,2}};
+    private int[][] X0 = {{1,0},{0,1},{1,1},{2,1},{1,2}};
+    private int[][] Y1 = {{1,0},{0,1},{1,1},{1,2},{1,3}};
+    private int[][] Y2 = {{0,0},{0,1},{1,1},{0,2},{0,3}};
+    private int[][] Z1 = {{0,0},{1,0},{1,1},{1,2},{2,2}};
+    private int[][] Z2 = {{1,0},{2,0},{1,1},{1,2},{0,2}};
+
+````
+
+Cada Polyomino (limitado hasta [Pentomino](https://es.wikipedia.org/wiki/Pentomin%C3%B3)) tiene su propio arreglo, denotando que cada uno es único, estas formas están representadas como coordenadas en una sub matriz, tomando como ejemplo, el punto (0,0) sería la parte superior izquierda, esto ya que en Processing, este sistema de "coordenadas" es igual, lo que facilitaba el proceso.
+
+<br>
+
+
+
+## **Selector de polyomino**
+
+<br>
+
+````java
+public Shape(int lvl){ //Constructor recieves level, putting a limit on wich kind of Polyominoes can spawn
+        switch(level){
+            case 1:
+                limit = 1;
+                break;
+            case 2:
+                limit = 2;
+                break;
+            case 3:
+                limit = 4;
+                break;
+            case 4:
+                limit = 11;
+                break;
+            case 5:
+                limit = 28;
+                break;
+        }
+        Size = 40;
+        order = (int)random(0,limit);
+        switch(order){  //Based on the level, this switch is restricted so board dimensions are proportional to polyominoes' blocks
+            case 0:
+                ShapeD = M0;
+                coloration = #13FF1C;
+                break;
+            case 1:
+                ShapeD = MR;
+                coloration = #d98cb3;
+                break;
+            case 2:
+                ShapeD = C0;
+                coloration = #d1b3ff;
+                break;
+            case 3:
+                ShapeD = R0;
+                coloration = #ffb3d9;
+                break;
+            case 4:
+                ShapeD = drado;
+                coloration = #80aaff;
+                break;
+            case 5:
+                ShapeD = line;
+                coloration = #e62e00;
+                break;
+            case 6:
+                ShapeD = treh;
+                coloration = #e67300;
+                break;
+            case 7:
+                ShapeD = eleL;
+                coloration = #66c285;
+                break;
+            case 8:
+                ShapeD = eleD;
+                coloration = #595454;
+                break;
+            case 9:
+                ShapeD = S1;
+                coloration = #00cc00;
+                break;
+            case 10:
+                ShapeD = S2;
+                coloration = #b3e6ff;
+                break;
+            case 11:
+                ShapeD = F1;
+                coloration = #00cccc;
+                break;
+            case 12:
+                ShapeD = F2;
+                coloration = #ff8000;
+                break;
+            case 13:
+                ShapeD = line2;
+                coloration = #1a1aff;
+                break;
+            case 14:
+                ShapeD = L1;
+                coloration = #ffff00;
+                break;
+            case 15:
+                ShapeD = L2;
+                coloration = #80ffcc;
+                break;
+            case 16:
+                ShapeD = N1;
+                coloration = #33cccc;
+                break;
+            case 17:
+                ShapeD = N2;
+                coloration = #990099;
+                break;
+            case 18:
+                ShapeD = P1;
+                coloration = #ff99c2;
+                break;
+            case 19:
+                ShapeD = P2;
+                coloration = #804000;
+                break;
+            case 20:
+                ShapeD = T0;
+                coloration = #a3a375;
+                break;
+            case 21:
+                ShapeD = U0;
+                coloration = #80ff80;
+                break;
+            case 22:
+                ShapeD = V0;
+                coloration = #df9fdf;
+                break;
+            case 23:
+                ShapeD = W0;
+                coloration = #ff1a1a;
+                break;
+            case 24:
+                ShapeD = X0;
+                coloration = #cc66ff;
+                break;
+            case 25:
+                ShapeD = Y1;
+                coloration = #4d9900;
+                break;
+            case 26:
+                ShapeD = Y2;
+                coloration = #cc3300;
+                break;
+            case 27:
+                ShapeD = Z1;
+                coloration = #bf8040;
+                break;
+            case 28:
+                ShapeD = Z2;
+                coloration = #459eab;
+                break;
+        }
+        if(order == 0){
+            blocks = 1;;
+        }else if (order ==1 ) {
+            blocks = 2;
+        }else if (order > 1 && order <= 3) {
+            blocks = 3;
+        }else if (order > 3 && order <= 10) {
+            blocks = 4;
+        }else{
+            blocks = 5;    //Depending on the restricted switch and the polyominoe selected, block number is taken in order to operate with the polyominoe
+        }
+
+````
+
+El constructor recibe un entero *lvl* el cual simboliza el nivel en el cuál el usuario está jugando, debido a que el tablero se amplía a media que aumenta el nivel, la cantidad de bloques de los polyominos también lo hace, el constructor restringe un rango para el cual un switch seleccionará un número al azar el cuál tendrá asociado un polyomino, a partir este último, se le dan atributos únicos de su tipo y únicos de su propia forma.
+
+<br>
+
+
+
+## **Atributos**
+
+<br>
+
+### *Blocks*
+
+<br>
+
+Este atributo, como su nombre lo indica, denota la cantidad de bloques que conforman el polyomino, este es necesario para ejecutar los ciclos `for` responsables de controlar y monitorizar a la forma, ya que, aunque se trate de un conjunto de bloques, cada uno tiene sus propias coordenadas en el eje **x** y en el eje **y**.
+
+<br>
+
+### *Coloration*
+
+<br>
+
+Este atributo se encarga de darle un color único a cada polyiomino, permitiendo que todas las formas se diferencien entre sí, el formato es de color [HTML](https://es.wikipedia.org/wiki/HTML)  ahorrando el uso innecesario de más variables como hubiese sido necesario en caso de usar el [RGB](https://es.wikipedia.org/wiki/RGB), el formato elegido complía con las expectativas y permitía un mejor manejo y entendimiento del código.
+
+<br>
+
+
+
+## **Forma de representación**
+
+<br>
+
+Antes de seguir con los métodos, es importante exponer la fórma en que se representan los polyominos, debido a que es extremadamente necesario para poder entender cómo funciona la clase ``Shape`` y el juego ``Psyco-etris`` en general
+
+<br>
+
+### **Independencia de bloques**
+
+<br>
+
+Como se mencionó anteriormente, cada bloque que conforma el Polyomino tiene sus propias coordenadas, esto es posible debido a que las formas son representadas como un arreglo, y se llaman por medio de un ciclo de la siguiente forma:
+
+<br>
+ 
+### *Coordenadas*
+
+### **X**
+
+````java
+for (int i = 0; i < blocks; ++i) {
+    text("Coordenada X del bloque"+ str(i) +":"+str(ShapeD[i][0]),50,50);
+````
+<br>
+
+Se puede inferir que la primera fila del array contiene el número de bloques del polyomino, como se puede ver, se llama al valor ``0`` del la segunda fila, que en este caso sería llamar la coordenada x del bloque mencionado en la fila anterior, lo mismo sucede con la coordenada **y**.
+
+<br>
+
+### **Y**
+
+````java
+for (int i = 0; i < blocks; ++i) {
+    text("Coordenada Y del bloque"+ str(i) +":"+str(ShapeD[i][1]),50,50);
+````
+Se observa la misma lógica en este caso, una vez entendida esta forma de represetnación, es pertinente continuar.
+
+<br>
+
+## **Métodos**
+
+<br>
+
+### ``rotate()``
+
+<br>
+
+````java
+public void rotate(){
+        if (ShapeD != drado && ShapeD != X0 && ShapeD != M0) {  //Rotation works in the same way as rotating a figure in the Cartesian coordinate system, (changing axises from their place and changing their signs)
+            int[][] rotated = new int[blocks][2];
+            if (rotcont % 4 == 0) {
+                for (int i = 0; i < blocks; ++i) {
+                    rotated[i][0] = OS[i][0] - ShapeD[1][0];
+                    rotated[i][1] = OS[i][1] - ShapeD[1][1];
+                }
+            }else if (rotcont % 4 == 1) {
+                for (int i = 0; i < blocks; ++i) {
+                    rotated[i][0] = -OS[i][1] - ShapeD[1][0];
+                    rotated[i][1] = OS[i][0] - ShapeD[1][1];
+                }
+            }else if (rotcont % 4 == 2) {
+                for (int i = 0; i < blocks; ++i) {
+                    rotated[i][0] = -OS[i][0] - ShapeD[1][0];
+                    rotated[i][1] = -OS[i][1] - ShapeD[1][1];
+                }
+            
+            }else if (rotcont % 4 == 3) {
+                for (int i = 0; i < blocks; ++i) {
+                    rotated[i][0] = OS[i][1] - ShapeD[1][0];
+                    rotated[i][1] = -OS[i][0] - ShapeD[1][1];
+                }
+            }
+            ShapeD = rotated;
+        }
+    }
+
+````
+Las rotaciones de los Polyominos se hacen de la misma forma a como se rota una figura o un conjunto de puntos dentro del plano cartesiano. Lo cual, significa que se invertían las posiciones y signos de las coordenadas **x** (``ShapeD[i][0]``) y **y** (``ShapeD[i][1]``).
+
+<br>
+
+### ``Limit()``
+
+````java
+public boolean Limit(String dir){   //Function that detects the limits on where the shape can move, left and down are always the same while right one changes depending on the main board's row number
+        switch(dir){
+            case "RIGHT":
+                for (int i = 0; i < blocks; ++i) {
+                    if(ShapeD[i][0]> rows-2){
+                        return false;
+                    }
+                }
+                break;
+            case "LEFT":
+                for (int i = 0; i < blocks; ++i) {
+                    if(ShapeD[i][0]<1){
+                        return false;
+                    }
+                }
+                break;
+            case "DOWN":
+                for (int i = 0; i < blocks; ++i) {
+                    if(ShapeD[i][1]>18){
+                        Moving = false;
+                        return false;
+                    }
+                }
+                break;
+        }
+        return true;
+    }
+````
+
+Detecta los límites dependiendo de cuantas columnas tenga la matriz, dado que se realiza el ciclo con los bloques del polyomino, es improbable que algún bloque se salga debido a sus características anteriormente descritas.
+
+<br>
+
+### ``MoveShape()``
+
+````java
+public void MoveShape(String dir, Board main_board){  //Function that moves the Shape and instantly injects it's position on the main board
+        for(int i = 0; i < blocks; ++i){ // Erases its previous position in the main_board
+            main_board.board_matrix[ShapeD[i][1]][ShapeD[i][0]] = 255;
+        }
+
+        if(Limit(dir) && colitions(dir, main_board)){
+            if(dir == "RIGHT"){  //Right
+                for (int i = 0; i < blocks; ++i) {
+                    ShapeD[i][0]++;  
+                }
+            }
+            if(dir == "LEFT"){ //Left
+                for (int i = 0; i < blocks; ++i) {
+                    ShapeD[i][0]--;  
+                }
+            }
+            if(dir == "DOWN"){ //Down
+                for (int i = 0; i < blocks; ++i) {
+                    ShapeD[i][1]++;  
+                }
+            }
+        }
+
+        for(int i = 0; i < blocks; ++i){ // Updates its current position in the main_board
+            main_board.board_matrix[ShapeD[i][1]][ShapeD[i][0]] = coloration;
+        }
+    }
+````
+
+Esta función mueve al polyomino, no sin antes borrar su posición anterior de la matriz para después inyectarla de nuevo una vez el movimiento se haya efectuado.
+
+### ``extraMove()``
+
+````java
+public void extraMove(String dir){ //Function that moves the shape but doesn't injects it's position on the main board
+        if(dir == "UP"){               //This is used to move the shape while it's outside of the matrix limits after a rotation
+            for (int i = 0; i < blocks; ++i) {
+                ShapeD[i][1]--;  //UP
+            }
+        }
+        if(Limit(dir)){
+            if(dir == "RIGHT"){
+                for (int i = 0; i < blocks; ++i) {
+                    ShapeD[i][0]++;  //Right
+                }
+            }
+            if(dir == "LEFT"){
+                for (int i = 0; i < blocks; ++i) {
+                    ShapeD[i][0]--;  //Left
+                }
+            }
+            if(dir == "DOWN"){
+                for (int i = 0; i < blocks; ++i) {
+                    ShapeD[i][1]++;  //Down
+                }
+            }
+        }
+    }
+````
+
+Esta función es similar a la anterior,a excepción de que esta no borra su posición actual ni tampoco inyecta su posición en la matriz luego de efectuar el movimiento, esta función es útil para tratar a las formas cuando están fuera de la matriz por causa de una rotación.
+
+### ``collitions()``
+
+````java
+boolean colitions(String dir, Board main_board){ //Boolean that detects collitions depending on the shape's surrounding
+        int x_1; // Auxiliar variables               //Works thanks to the shape's positioning being constantly injected on the matrix
+        int y_1;
+
+        if(dir == "DOWN"){
+            for(int i = 0; i < blocks; ++i){
+                x_1 = ShapeD[i][0];
+                y_1 = ShapeD[i][1];
+
+                if(main_board.board_matrix[y_1 + 1][x_1] != 255 && not_in(x_1, y_1 + 1)){
+                    Moving = false;
+                    return false;
+                }
+            }
+        }
+
+        if(dir == "RIGHT"){
+            for(int i = 0; i < blocks; ++i){
+                x_1 = ShapeD[i][0];
+                y_1 = ShapeD[i][1];
+
+                if(main_board.board_matrix[y_1][x_1 + 1] != 255 && not_in(x_1 + 1, y_1)){
+                    return false;
+                }
+            }
+        }
+
+        if(dir == "LEFT"){
+            for(int i = 0; i < blocks; ++i){
+                x_1 = ShapeD[i][0];
+                y_1 = ShapeD[i][1];
+
+                if(main_board.board_matrix[y_1][x_1 - 1] != 255 && not_in(x_1 - 1, y_1)){
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+````
+Este booleano permite identificar bloques a los costados de la Polyforma que se está controlando, para no tomar en cuenta los bloques de la misma forma se usa el siguiente método.
+
+### ``not_in()``
+
+````java
+boolean not_in(int x, int y){ // Method checks if the block in the parameter is a block from the fig
+        for(int i = 0; i < blocks; ++i){
+            if(x == ShapeD[i][0] && y == ShapeD[i][1]){
+                return false;
+            }
+        }
+
+        return true;
+    }
+````
+
+### ``inject()``
+
+````java
+void inject(Board mini_board, int h){ // Method used to show the fig in the mini_board
+        if(h < 4){
+            for(int i = 0; i < blocks; ++i){
+                mini_board.board_matrix[ShapeD[i][1] + 2][ShapeD[i][0] + 2] = coloration;
+            }
+        }
+        else{
+            for(int i = 0; i < blocks; ++i){
+                mini_board.board_matrix[ShapeD[i][1] + 1][ShapeD[i][0] + 1] = coloration;
+            }
+        }   
+        
+    }
+````
+Inyecta una forma no movible ni rotable en una matriz secundaria para poder mostrar el cuadro de ``Siguiente pieza``.
+
+<br>
+
+## **Screens**
+
+````java
+psyco = loadImage("Psycoetris.png");
+weirdfont = loadFont("Pristina-Regular-48.vlw");
+
+class Screens{  //Class used to show Scoreboard and final and starting screens
+    public Screens(){}
+````
+Esta se encarga de mostrar la pantalla de inicio, el tablero de puntuación y la pantalla de game_over, utliza la variable ``weirdFont`` (fuente) y ``psyco`` (imagen PNG) que se cargan en el Setup para evitar problemas de rendimiento
+
+
+<br>
+
+## **Métodos**
+
+<br>
+
+### ``startScreen()``
+
+````java
+void startScreen(){ //Creates the start screen wich disappears after player presses a key
+        rect(160,160,1280,640);
+        image(psyco, 320, 360, 460, 200);
+        push();
+        fill(0);
+        textFont(weirdfont, 50);
+        text("Welcome!",960,440);
+        text("Press any key to play",960,500);
+        pop();
+
+    }
+````
+Muestra un cuadro con 160 pixeles de distancia de cada lado, el cual desaparece una vez se oprime una tecla y comienza el juego.
+
+### ``showBoard()``
+
+````java
+void showBoard(){   //Shows scoreboard with level and points
+        rect(1120,400,240,360);
+        image(psyco, 1125, 400, 230, 100);
+        push();
+        fill(0);
+        textFont(weirdfont, 50);
+        text("Score: "+str(main_board.points),1130,540);
+        text("Level: "+str(dificulty),1130,680);
+        pop();
+    }
+````
+Muestra el tablero de puntuación, la cual saca a partir de un objeto de la clase ``Board``
+
+### ``showFinalGame()``
+
+````java
+void showFinalGame(){  //Creates the final screen, wich shows final points achieved by the players
+        rect(160,160,1280,640);
+        image(psyco, 320, 360, 460, 200);
+        push();
+        fill(0);
+        textFont(weirdfont, 50);
+        text("Final Score: "+str(main_board.points-2000)+" !",960,440);
+        text("Thanks for playing!",960,500);
+        pop();
+    }
+````
+Muestra la pantalla de game over, dando la puntuación máxima alcanzada
