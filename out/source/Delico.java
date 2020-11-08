@@ -23,6 +23,7 @@ Board mini_board;
 Shape fig;
 Shape other;
 public void setup() {
+    strokeWeight(5);
     
     n = 20;
     main_board = new Board(20, n, 255, 80);
@@ -96,6 +97,7 @@ public void keyReleased() {
     }
 
     if(keyCode == UP){
+        fig.rotate();
         fig.rotate();
     }
     fig.rotcont++;
@@ -359,6 +361,7 @@ class Shape{
         OS = ShapeD;
         rotcont = 0;
     }
+
     public void rotate(){
         if (ShapeD != drado && ShapeD != X0 && ShapeD != M0) {
             int[][] rotated = new int[blocks][2];
@@ -388,18 +391,14 @@ class Shape{
             ShapeD = rotated;
         }
     }
-    public void ShowShape(){
-        fill(coloration);
-        for (int i = 0; i < blocks; i++) {
-            rect((ShapeD[i][0]*Size)+80, (ShapeD[i][1]*Size)+80,Size,Size);
-        }
-    }
+
     public void GoDown(int level){
         if(cont%(55-level) == 0){
             MoveShape("DOWN", main_board);
         }
         cont++;
     }
+
     public boolean Limit(String dir){
         switch(dir){
             case "RIGHT":
@@ -435,7 +434,7 @@ class Shape{
             main_board.board_matrix[ShapeD[i][1]][ShapeD[i][0]] = 255;
         }
 
-        if(Limit(dir)){
+        if(Limit(dir) && colitions(dir, main_board)){
             if(dir == "RIGHT"){
                 for (int i = 0; i < blocks; ++i) {
                     ShapeD[i][0]++;  //Dereiaaaaa
@@ -480,6 +479,57 @@ class Shape{
                 }
             }
         }
+    }
+
+    public boolean colitions(String dir, Board main_board){ 
+        int x_1; // Auxiliar variables
+        int y_1;
+
+        if(dir == "DOWN"){
+            for(int i = 0; i < blocks; ++i){
+                x_1 = ShapeD[i][0];
+                y_1 = ShapeD[i][1];
+
+                if(main_board.board_matrix[y_1 + 1][x_1] != 255 && not_in(x_1, y_1 + 1)){
+                    Moving = false;
+                    return false;
+                }
+            }
+        }
+
+        if(dir == "RIGHT"){
+            for(int i = 0; i < blocks; ++i){
+                x_1 = ShapeD[i][0];
+                y_1 = ShapeD[i][1];
+
+                if(main_board.board_matrix[y_1][x_1 + 1] != 255 && not_in(x_1 + 1, y_1)){
+                    return false;
+                }
+            }
+        }
+
+        if(dir == "LEFT"){
+            for(int i = 0; i < blocks; ++i){
+                x_1 = ShapeD[i][0];
+                y_1 = ShapeD[i][1];
+
+                if(main_board.board_matrix[y_1][x_1 - 1] != 255 && not_in(x_1 - 1, y_1)){
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    public boolean not_in(int x, int y){ // Method checks if the block in the parameter is a block from the fig
+        for(int i = 0; i < blocks; ++i){
+            if(x == ShapeD[i][0] && y == ShapeD[i][1]){
+                return false;
+            }
+        }
+
+        return true;
     }
 
 }
