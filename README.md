@@ -828,6 +828,7 @@ Las funciones implementadas para la implementación del programa son:
 <br>
 
 ### `keyReleased()`
+<br>
 
 ````java
 void keyReleased() {
@@ -885,10 +886,15 @@ void keyReleased() {
 
 }
 ````
+<br>
+
 Permite identifical si un bloque pertenenciente a un polyomino está fuera de la matriz y gracias al ``try`` y ``catch``, se puede resolver el problema mediante tres funciones recursivas perteneneicentes al "tipo" ``HandleSides``.
+
+<br>
 
 
 ### `HandleSidesR()`
+<br>
 
 ````java
 void HandleSidesR(){ //Recursive function to move the shape when it goes over the right limit
@@ -907,9 +913,14 @@ void HandleSidesR(){ //Recursive function to move the shape when it goes over th
     }
 }
 ````
+<br>
+
 Permite mover un polyomino cuando se sale por el lado derecho e inyectar sus coordenadas a la matriz del tablero.
 
+<br>
+
 ### `HandleSidesL()`
+<br>
 
 ````java
 void HandleSidesL(){ //Recursive function to move the shape when it goes over the left limit
@@ -928,9 +939,14 @@ void HandleSidesL(){ //Recursive function to move the shape when it goes over th
     }
 }
 ````
+<br>
+
 Permite mover un polyomino cuando se sale por el lado izquierdo e inyectar sus coordenadas a la matriz del tablero.
 
+<br>
+
 ### `HandleSidesD()`
+<br>
 
 ````java
 void HandleSidesD(){ //Recursive function to move the shape when it goes over the left limit
@@ -949,7 +965,13 @@ void HandleSidesD(){ //Recursive function to move the shape when it goes over th
     }
 }
 ````
+<br>
+
 Permite mover un polyomino cuando se sale por abajo e inyectar sus coordenadas a la matriz del tablero.
+
+<br>
+
+
 
 
 
