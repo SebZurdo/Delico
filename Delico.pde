@@ -1,7 +1,5 @@
 int Size;
-int n,h;
-int[][] drado = {{0,0},{1,0},{0,1},{1,1}};
-int[][] eleD = {{0,0},{1,0},{2,0},{2,1}};
+int n,level;
 Board main_board;
 Board mini_board;
 Shape fig;
@@ -10,12 +8,11 @@ Shape other;
 void setup() {
     strokeWeight(5);
     size(1600,960);
-    n = 20;
-    h = 1;
-    main_board = new Board(20, n, 255, 80);
+    level = 1;
+    main_board = new Board(20, 20, 255, 80);
     mini_board = new Board(5, 5, 255, 1120);
-    other = new Shape(h);
-    fig = new Shape(h);
+    other = new Shape(level);
+    fig = new Shape(level);
     fig.Moving = true;
 }
 
@@ -58,6 +55,12 @@ void keyReleased() {
                 main_board.board_matrix[fig.ShapeD[i][1]][fig.ShapeD[i][0]] = 255;
             }
         } catch (Exception e) {
+            for (int i = 0; i < fig.blocks; ++i) {
+                if(fig.ShapeD[i][1] < 5){
+                    HandleSidesU();
+                    break;
+                }
+            }
             for (int i = 0; i < fig.blocks; ++i) {
                 if(fig.ShapeD[i][1] > 15){
                     HandleSidesD();
@@ -133,19 +136,32 @@ void HandleSidesD(){
         HandleSidesD();
     }
 }
+void HandleSidesU(){
+    try{
+        for(int k = 0; k < fig.blocks; ++k){
+            main_board.board_matrix[fig.ShapeD[k][1]][fig.ShapeD[k][0]] = 255;
+        }
+        fig.rotate();
+        fig.rotate();
+        for(int k = 0; k < fig.blocks; ++k){
+            main_board.board_matrix[fig.ShapeD[k][1]][fig.ShapeD[k][0]] = fig.coloration;
+        }
+    } catch (Exception e) {
+        fig.extraMove("DOWN");
+        HandleSidesU();
+    }
+}
 
 void bottom(){
     if (!fig.Moving) {
         fig = other;
         fig.Moving = true;
-        other = new Shape(h);
+        other = new Shape(level);
         main_board.completed_lines(20);
     }
 }
 
-void mousePressed(){
-    h++;
-}
+
 class Board{
 
     private color[][] board_matrix;
@@ -288,16 +304,22 @@ class Shape{
     private int limit;
     private int blocks;
     public Shape(int lvl){
-        if(lvl == 1){
-            limit = 1;
-        }else if (lvl == 2) {
-            limit = 2;
-        }else if (lvl == 3) {
-            limit = 4;
-        }else if (lvl == 4) {
-            limit = 11;
-        }else if (lvl == 5) {
-            limit = 28;
+        switch(level){
+            case 1:
+                limit = 1;
+                break;
+            case 2:
+                limit = 2;
+                break;
+            case 3:
+                limit = 4;
+                break;
+            case 4:
+                limit = 11;
+                break;
+            case 5:
+                limit = 28;
+                break;
         }
         Size = 40;
         order = (int)random(0,limit);
