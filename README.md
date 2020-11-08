@@ -10,7 +10,7 @@ El nombre atribuido a este juego se debe a que en cierto punto del gameplay mult
 
 <br>
 
-La pista de musica utilizada es: [Astrix - Deep Jungle Walk](https://www.youtube.com/watch?v=lIuEuJvKos4). Todos los derechos reservados a su autor. Para poder escucharla durante la ejecución del programa se debe de instalar la librería de sonido de Processing, [Aquí un tutorial sencillo de como descargar y usar esta librería](https://poanchen.github.io/blog/2016/11/15/how-to-add-background-music-in-processing-3.0).
+La pista de musica utilizada es: [Astrix - Deep Jungle Walk](https://www.youtube.com/watch?v=lIuEuJvKos4). Todos los derechos reservados a su autor. Para poder escucharla durante la ejecución del programa se debe de instalar la librería de sonido de Processing, [Aquí un tutorial basico de como descargar y usar esta librería](https://poanchen.github.io/blog/2016/11/15/how-to-add-background-music-in-processing-3.0).
 
 <br>
 
