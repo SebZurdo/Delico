@@ -29,39 +29,35 @@ void setup() {
 
 void draw() {
     background(v_1 * 1, v_2 * 1, v_3 *1);  
-    
     main_board.display(rows, v_1, v_2, v_3);
     mini_board.display(6, 0, 0, 0);
     fig.GoDown(0);
     bottom();
     LevelToLimits(level);
     scoreboard.showBoard();
-    makelevels();
     ScoreToLevels(main_board.points);
 
 }
 
-void makelevels(){
-    if(level <=5){
-        dificulty = level;
-    }
-}
 
 void ScoreToLevels(int score){
     if(score ==200){
         level = 2;
     }else if (score == 700) {
         level = 3;
-    }else if (score ==1000) {
+    }else if (score ==800) {
         level = 4;
-    }else if (score == 2000) {
+    }else if (score == 900) {
         level = 5;
-    }else if (score > 2000) {
+    }else if (score > 1000) {
         level = 5;
-        if(main_board.completed_line){
-            dificulty++;
-        }
     }
+    if(level < 5){
+        dificulty = level;
+    }
+}
+void mousePressed(){
+    dificulty++;
 }
 void keyPressed() { // The fig object updates the main_board matrix within its methods
     if(keyCode == RIGHT){
