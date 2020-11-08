@@ -13,10 +13,11 @@ void setup() {
     n = 20;
     h = 1;
     main_board = new Board(20, n, 255, 80);
-    mini_board = new Board(5, 5, 255, 1120);
+    mini_board = new Board(6, 6, 255, 1120);
     other = new Shape(h);
     fig = new Shape(h);
     fig.Moving = true;
+    other.inject(mini_board, h);
 }
 
 void draw() {
@@ -140,6 +141,8 @@ void bottom(){
         fig.Moving = true;
         other = new Shape(h);
         main_board.completed_lines(20);
+        mini_board.clean();
+        other.inject(mini_board, h);
     }
 }
 
@@ -177,6 +180,14 @@ class Board{
             for(int j = 0; j < x; ++j){
                 fill(board_matrix[i][j]);
                 square(j * block_size + space_x, i * block_size + 80, block_size);
+            }
+        }
+    }
+
+    void clean(){
+        for(int i = 0; i < y; ++i){
+            for(int j = 0; j < x; ++j){
+                board_matrix[i][j] = board_color;
             }
         }
     }
@@ -602,6 +613,21 @@ class Shape{
         }
 
         return true;
+    }
+
+    void inject(Board mini_board, int h){ // Method used to show the fig in the mini_board
+        if(h < 4){
+            for(int i = 0; i < blocks; ++i){
+                mini_board.board_matrix[ShapeD[i][1] + 2][ShapeD[i][0] + 2] = coloration;
+            }
+        }
+        else{
+            for(int i = 0; i < blocks; ++i){
+                mini_board.board_matrix[ShapeD[i][1] + 1][ShapeD[i][0] + 1] = coloration;
+            }
+        }   
+        
+        
     }
 
 }
