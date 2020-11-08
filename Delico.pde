@@ -1,5 +1,5 @@
 int Size;
-int n,level;
+int level,rows;
 Board main_board;
 Board mini_board;
 Shape fig;
@@ -10,10 +10,11 @@ void setup() {
     size(1600,960);
     level = 1;
     main_board = new Board(20, 20, 255, 80);
-    mini_board = new Board(5, 5, 255, 1120);
+    mini_board = new Board(6, 6, 255, 1120);
     other = new Shape(level);
     fig = new Shape(level);
     fig.Moving = true;
+    other.inject(mini_board, level);
 }
 
 void draw() {
@@ -22,10 +23,11 @@ void draw() {
     mini_board.display();
     fig.GoDown(0);
     bottom();
+    LevelToLimits(level);
     textSize(20);
     fill(0);
-    text("Fig limit"+str(fig.limit),1000,500);
-    text("order"+str(fig.order),1000,515);
+    text("Rows"+str(rows),1000,500);
+    text("Blocks"+str(fig.blocks),1000,515);
 
 }
 
@@ -56,25 +58,19 @@ void keyReleased() {
             }
         } catch (Exception e) {
             for (int i = 0; i < fig.blocks; ++i) {
-                if(fig.ShapeD[i][1] < 5){
-                    HandleSidesU();
-                    break;
-                }
-            }
-            for (int i = 0; i < fig.blocks; ++i) {
                 if(fig.ShapeD[i][1] > 15){
                     HandleSidesD();
                     break;
                 }
             }
             for (int i = 0; i < fig.blocks; ++i) {
-                if(fig.ShapeD[i][0] > int(n/2)){
+                if(fig.ShapeD[i][0] > int(rows/2)){
                     HandleSidesR();
                     break;
                 }
             }
             for (int i = 0; i < fig.blocks; ++i) {
-                if(fig.ShapeD[i][0] < int(n/2)){
+                if(fig.ShapeD[i][0] < int(rows/2)){
                     HandleSidesL();
                     break;
                 }
@@ -136,28 +132,38 @@ void HandleSidesD(){
         HandleSidesD();
     }
 }
-void HandleSidesU(){
-    try{
-        for(int k = 0; k < fig.blocks; ++k){
-            main_board.board_matrix[fig.ShapeD[k][1]][fig.ShapeD[k][0]] = 255;
-        }
-        fig.rotate();
-        fig.rotate();
-        for(int k = 0; k < fig.blocks; ++k){
-            main_board.board_matrix[fig.ShapeD[k][1]][fig.ShapeD[k][0]] = fig.coloration;
-        }
-    } catch (Exception e) {
-        fig.extraMove("DOWN");
-        HandleSidesU();
-    }
-}
 
 void bottom(){
     if (!fig.Moving) {
         fig = other;
         fig.Moving = true;
         other = new Shape(level);
-        main_board.completed_lines(20);
+        main_board.completed_lines(rows);
+        mini_board.clean();
+        other.inject(mini_board, level);
+    }
+}
+
+void mousePressed(){
+    level++;
+}
+void LevelToLimits(int level){
+    switch(level){
+        case 1:
+            rows = 4;
+            break;
+        case 2:
+            rows = 6;
+            break;
+        case 3:
+            rows = 8;
+            break;
+        case 4:
+            rows = 10;
+            break;
+        case 5:
+            rows = 20;
+            break; 
     }
 }
 
@@ -193,6 +199,14 @@ class Board{
             for(int j = 0; j < x; ++j){
                 fill(board_matrix[i][j]);
                 square(j * block_size + space_x, i * block_size + 80, block_size);
+            }
+        }
+    }
+
+    void clean(){
+        for(int i = 0; i < y; ++i){
+            for(int j = 0; j < x; ++j){
+                board_matrix[i][j] = board_color;
             }
         }
     }
@@ -497,7 +511,7 @@ class Shape{
         switch(dir){
             case "RIGHT":
                 for (int i = 0; i < blocks; ++i) {
-                    if(ShapeD[i][0]>(n-2)){
+                    if(ShapeD[i][0]> rows-2){
                         return false;
                     }
                 }
@@ -624,6 +638,21 @@ class Shape{
         }
 
         return true;
+    }
+
+    void inject(Board mini_board, int h){ // Method used to show the fig in the mini_board
+        if(h < 4){
+            for(int i = 0; i < blocks; ++i){
+                mini_board.board_matrix[ShapeD[i][1] + 2][ShapeD[i][0] + 2] = coloration;
+            }
+        }
+        else{
+            for(int i = 0; i < blocks; ++i){
+                mini_board.board_matrix[ShapeD[i][1] + 1][ShapeD[i][0] + 1] = coloration;
+            }
+        }   
+        
+        
     }
 
 }
