@@ -254,8 +254,6 @@ void gameover(Shape fig, Board main_board, Board mini_board){
             }
             over = true;
             noLoop();
-
-            // Aqui un ciclo infinito, si se presiona cierta tecla no se reiniciar el juego si quiere, si no pues solo tendría que borrar el rectangulo de puntaje y poner un letrero de puntaje final y sha
         }
     }
 }
