@@ -619,10 +619,10 @@ boolean over, start;
 
  1. `level` establece el nivel actual del juego.
  2. `rows` establece el limite de columnas para el movimiento de las figuras y mostrar el tablero de juego.
- 3. `out` ////
+ 3. `out` permite sabe si la pieza está fuera de la matriz establecida.
  4. `dificulty` establece que tan rapido caen las figuras.
  5. `v_1, v_2, v_3` son los tres valores necesarios para representar el color del fondo en formato RGB.
- 6. `over, start` ////    
+ 6. `over, start` permiten saber si la pantalla de game over o de inicio deben de ser mostradas.    
 
 
 <br>
