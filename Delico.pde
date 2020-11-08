@@ -6,7 +6,9 @@ Board mini_board;
 Shape fig;
 Shape other;
 
-int v_1, v_2, v_3;
+int v_1 = 0;
+int v_2 = 0;
+int v_3 = 0;
 
 void setup() {
     strokeWeight(3);
@@ -22,18 +24,8 @@ void setup() {
 }
 
 void draw() {
-    if(level == 5){
-        v_1 = int(random(255));
-        v_2 = int(random(255));
-        v_3 = int(random(255));
-
-        background(v_1 * 1, v_2 * 1, v_3 *1); 
-    }
+    background(v_1 * 1, v_2 * 1, v_3 *1);  
     
-    else{
-        background(0);
-    }
-
     main_board.display(rows);
     mini_board.display(6);
     fig.GoDown(0);
@@ -149,6 +141,10 @@ void HandleSidesD(){
 
 void bottom(){
     if (!fig.Moving) {
+        v_1 = int(random(255));
+        v_2 = int(random(255));
+        v_3 = int(random(255));
+
         fig = other;
         fig.Moving = true;
         other = new Shape(level);
