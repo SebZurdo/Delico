@@ -1,5 +1,6 @@
 int Size;
 int level,rows;
+ScoreSquare scoreboard;
 Board main_board;
 Board mini_board;
 Shape fig;
@@ -15,6 +16,7 @@ void setup() {
     mini_board = new Board(6, 6, 255, 1120);
     other = new Shape(level);
     fig = new Shape(level);
+    scoreboard = new ScoreSquare();
     fig.Moving = true;
     other.inject(mini_board, level);
 }
@@ -37,6 +39,7 @@ void draw() {
     fig.GoDown(0);
     bottom();
     LevelToLimits(level);
+    scoreboard.showBoard();
     textSize(20);
     fill(0);
     text("Rows"+str(rows),1000,500);
@@ -673,4 +676,17 @@ class Shape{
         
     }
 
+}
+
+class ScoreSquare{
+    private int bigfont, smallfont;
+    private int score;
+
+    public ScoreSquare(){
+        score = main_board.points;
+    }
+
+    void showBoard(){
+        rect(1120,400,500,700);
+    }
 }
