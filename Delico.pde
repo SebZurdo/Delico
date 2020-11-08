@@ -82,6 +82,7 @@ void keyReleased() {
 
     if(keyCode == UP){
         fig.rotate();
+        fig.rotate();
     }
     fig.rotcont++;
 
