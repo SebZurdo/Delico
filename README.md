@@ -827,6 +827,130 @@ Las funciones implementadas para la implementación del programa son:
 
 <br>
 
+### `keyReleased()`
+
+````java
+void keyReleased() {
+
+    if(start){
+        start = false;
+    }
+    for(int i = 0; i < fig.blocks; ++i){ // Here updates its position like in the Moveshape method
+        main_board.board_matrix[fig.ShapeD[i][1]][fig.ShapeD[i][0]] = 255;
+    }
+    
+    if(keyCode == UP){
+        try{    //Use of Try and Catch with some recursive functions to avoid the shape from going outside of the board and crashing the program
+            fig.rotate();
+            fig.rotate();
+            for(int i = 0; i < fig.blocks; ++i){ // Here updates its position like in the Moveshape method
+                main_board.board_matrix[fig.ShapeD[i][1]][fig.ShapeD[i][0]] = 255;
+            }
+        } catch (Exception e) {
+            for (int i = 0; i < fig.blocks; ++i) {
+                if(fig.ShapeD[i][1] > 15){
+                    HandleSidesD();
+                    break;
+                }
+            }
+            for (int i = 0; i < fig.blocks; ++i) {
+                if(fig.ShapeD[i][0] > int(rows/2)){
+                    HandleSidesR();
+                    break;
+                }
+            }
+            for (int i = 0; i < fig.blocks; ++i) {
+                if(fig.ShapeD[i][0] < int(rows/2)){
+                    HandleSidesL();
+                    break;
+                }
+            }
+        }
+        for (int i = 0; i < fig.blocks; ++i) {
+            if(fig.ShapeD[i][0] > (rows-2)){
+                    out++;
+                }
+        }
+        for (int j = 0; j < out; ++j) {
+            fig.extraMove("LEFT");
+        }
+        fig.rotcont++;
+        out = 0;
+    }
+
+    
+    for(int i = 0; i < fig.blocks; ++i){ //Updates the shape's position and injects it into the main board
+        main_board.board_matrix[fig.ShapeD[i][1]][fig.ShapeD[i][0]] = fig.coloration;
+    }
+
+}
+````
+Permite identifical si un bloque pertenenciente a un polyomino está fuera de la matriz y gracias al ``try`` y ``catch``, se puede resolver el problema mediante tres funciones recursivas perteneneicentes al "tipo" ``HandleSides``.
+
+
+### `HandleSidesR()`
+
+````java
+void HandleSidesR(){ //Recursive function to move the shape when it goes over the right limit
+    try{
+        for(int k = 0; k < fig.blocks; ++k){
+            main_board.board_matrix[fig.ShapeD[k][1]][fig.ShapeD[k][0]] = 255;
+        }
+        fig.rotate();
+        fig.rotate();
+        for(int k = 0; k < fig.blocks; ++k){
+            main_board.board_matrix[fig.ShapeD[k][1]][fig.ShapeD[k][0]] = fig.coloration;
+        }
+    } catch (Exception e) {
+        fig.extraMove("LEFT");
+        HandleSidesR();
+    }
+}
+````
+Permite mover un polyomino cuando se sale por el lado derecho e inyectar sus coordenadas a la matriz del tablero.
+
+### `HandleSidesL()`
+
+````java
+void HandleSidesL(){ //Recursive function to move the shape when it goes over the left limit
+    try{
+        for(int k = 0; k < fig.blocks; ++k){
+            main_board.board_matrix[fig.ShapeD[k][1]][fig.ShapeD[k][0]] = 255;
+        }
+        fig.rotate();
+        fig.rotate();
+        for(int k = 0; k < fig.blocks; ++k){
+            main_board.board_matrix[fig.ShapeD[k][1]][fig.ShapeD[k][0]] = fig.coloration;
+        }
+    } catch (Exception e) {
+        fig.extraMove("RIGHT");
+        HandleSidesL();
+    }
+}
+````
+Permite mover un polyomino cuando se sale por el lado izquierdo e inyectar sus coordenadas a la matriz del tablero.
+
+### `HandleSidesD()`
+
+````java
+void HandleSidesD(){ //Recursive function to move the shape when it goes over the left limit
+    try{
+        for(int k = 0; k < fig.blocks; ++k){
+            main_board.board_matrix[fig.ShapeD[k][1]][fig.ShapeD[k][0]] = 255;
+        }
+        fig.rotate();
+        fig.rotate();
+        for(int k = 0; k < fig.blocks; ++k){
+            main_board.board_matrix[fig.ShapeD[k][1]][fig.ShapeD[k][0]] = fig.coloration;
+        }
+    } catch (Exception e) {
+        fig.extraMove("UP");
+        HandleSidesD();
+    }
+}
+````
+Permite mover un polyomino cuando se sale por abajo e inyectar sus coordenadas a la matriz del tablero.
+
 
 
 
