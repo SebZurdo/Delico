@@ -52,9 +52,6 @@ boolean over, start;
 
 <br>
 
-El flujo general del codigo es el siguiente: //////
-
-<br>
 
 ____
 
