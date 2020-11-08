@@ -45,41 +45,35 @@ public void setup() {
 
 public void draw() {
     background(v_1 * 1, v_2 * 1, v_3 *1);  
-    
-    main_board.display(rows);
-    mini_board.display(6);
+    main_board.display(rows, v_1, v_2, v_3);
+    mini_board.display(6, 0, 0, 0);
     fig.GoDown(0);
     bottom();
     LevelToLimits(level);
     scoreboard.showBoard();
-    makelevels();
     ScoreToLevels(main_board.points);
-    textSize(20);
-    fill(0);
 
 }
 
-public void makelevels(){
-    if(level <=5){
-        dificulty = level;
-    }
-}
 
 public void ScoreToLevels(int score){
     if(score ==200){
         level = 2;
     }else if (score == 700) {
         level = 3;
-    }else if (score ==1000) {
+    }else if (score ==800) {
         level = 4;
-    }else if (score == 1400) {
+    }else if (score == 900) {
         level = 5;
-    }else if (score > 1400) {
+    }else if (score > 1000) {
         level = 5;
-        if(!main_board.completed_line){
-            dificulty++;
-        }
     }
+    if(level < 5){
+        dificulty = level;
+    }
+}
+public void mousePressed(){
+    dificulty++;
 }
 public void keyPressed() { // The fig object updates the main_board matrix within its methods
     if(keyCode == RIGHT){
@@ -255,7 +249,7 @@ class Board{
         }
     }
 
-    public void display(int rows){
+    public void display(int rows, int v_1, int v_2, int v_3){
         for(int i = 0; i < y; ++i){
             for(int j = 0; j < rows; ++j){
                 fill(board_matrix[i][j]);
@@ -265,8 +259,11 @@ class Board{
 
         for(int i = 0; i < y; ++i){
             for(int j = rows; j < x; ++j){
-                fill(0);
+                push();
+                noStroke();
+                fill(v_1 * 1, v_2 * 1, v_3 * 1);
                 square(j * block_size + space_x, i * block_size + 80, block_size);
+                pop();
             }
         }
     }

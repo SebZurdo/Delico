@@ -39,6 +39,7 @@ void setup() {
 }
 
 void draw() {
+<<<<<<< HEAD
     if(level == 5 && int(random(1, 3)) % 2 == 0){
         v_1 = int(random(255));
         v_2 = int(random(255));
@@ -50,22 +51,20 @@ void draw() {
     background(v_1 * 1, v_2 * 1, v_3 *1);
     }  
     
+=======
+    background(v_1 * 1, v_2 * 1, v_3 *1);  
+>>>>>>> 80468261562158b46503c7b872c0d1fb3ee5819e
     main_board.display(rows, v_1, v_2, v_3);
     mini_board.display(6, 0, 0, 0);
     fig.GoDown(0);
     bottom();
     LevelToLimits(level);
     scoreboard.showBoard();
-    makelevels();
     ScoreToLevels(main_board.points);
+    gameover();
 
 }
 
-void makelevels(){
-    if(level < 5){
-        dificulty = level;
-    }
-}
 
 void ScoreToLevels(int score){
     if(score ==200){
@@ -77,6 +76,15 @@ void ScoreToLevels(int score){
     }else if (score >= 1400) {
         level = 5;
     }
+    if(level < 5){
+        dificulty = level;
+    }
+}
+
+boolean gameover(){
+    if(!fig.Moving){
+            return true;
+    } return false;
 }
 void keyPressed() { // The fig object updates the main_board matrix within its methods
     if(keyCode == RIGHT){
@@ -743,6 +751,7 @@ class ScoreSquare{
         textFont(weirdfont, 50);
         text("Score: "+str(main_board.points),1130,540);
         text("Level: "+str(dificulty),1130,680);
+        text("Gameover: "+str(gameover()),1130,700);
         pop();
     }
 }
