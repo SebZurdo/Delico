@@ -2,7 +2,6 @@ import processing.sound.*;
 SoundFile file;
 String audioname = "Astrix.mp3"; //Music setup
 String path;
-int Size;
 int level,rows,out,dificulty;
 PImage psyco; // Psyco-etris Image loaded as the font wasn't loadable from Processing
 PFont weirdfont; // Processing-loadable font used for score and level
@@ -263,12 +262,12 @@ void gameover(Shape fig, Board main_board, Board mini_board){
 class Board{
 
     private color[][] board_matrix;
-    private color board_color;
-    private int y;
-    private int x;
+    private color board_color; //Initial board color
+    private int y; // Lines
+    private int x; // Columns
     private int block_size;
-    private int space_x;
-    private int points;
+    private int space_x; // Space from the left border
+    private int points; // Game score
 
     Board(int matrix_lines, int matrix_columns, color color_b, int space) {
         board_matrix = new color[matrix_lines][matrix_columns];
@@ -286,7 +285,7 @@ class Board{
         }
     }
 
-    void display(int rows, int v_1, int v_2, int v_3){
+    void display(int rows, int v_1, int v_2, int v_3){ // Displays the board according to the limit of what we want to display
         for(int i = 0; i < y; ++i){
             for(int j = 0; j < rows; ++j){
                 fill(board_matrix[i][j]);
@@ -305,7 +304,7 @@ class Board{
         }
     }
 
-    void clean(){
+    void clean(){ // Cleans the board
         for(int i = 0; i < y; ++i){
             for(int j = 0; j < x; ++j){
                 board_matrix[i][j] = board_color;
@@ -313,7 +312,7 @@ class Board{
         }
     }
 
-    void completed_lines(int limit, int level){
+    void completed_lines(int limit, int level){ // Checks and erases the completed lines and also updates the score
         color block_color; // Variable that stores the color of the initial block of a line
         int completed_lines = 0;
         boolean completed_line = true;
@@ -760,7 +759,7 @@ class Shape{   //Poly
 
 }
 
-class Screens{  //Class used to show Scoreboard and final and starting screens
+class Screens{ //Class used to show Scoreboard and final and starting screens
     private int bigfont, smallfont;
 
     public Screens(){}
@@ -777,7 +776,7 @@ class Screens{  //Class used to show Scoreboard and final and starting screens
 
     }
 
-    void showBoard(){   //Shows scoreboard with level and points
+    void showBoard(){ //Shows scoreboard with level and points
         rect(1120,400,240,360);
         image(psyco, 1125, 400, 230, 100);
         push();
@@ -788,7 +787,7 @@ class Screens{  //Class used to show Scoreboard and final and starting screens
         pop();
     }
 
-    void showFinalGame(){  //Creates the final screen, wich shows final points achieved by the players
+    void showFinalGame(){ //Creates the final screen, wich shows final points achieved by the player
         rect(160,160,1280,640);
         image(psyco, 320, 360, 460, 200);
         push();
