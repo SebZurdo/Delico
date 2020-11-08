@@ -30,8 +30,8 @@ void setup() {
 void draw() {
     background(v_1 * 1, v_2 * 1, v_3 *1);  
     
-    main_board.display(rows);
-    mini_board.display(6);
+    main_board.display(rows, v_1, v_2, v_3);
+    mini_board.display(6, 0, 0, 0);
     fig.GoDown(0);
     bottom();
     LevelToLimits(level);
@@ -241,7 +241,7 @@ class Board{
         }
     }
 
-    void display(int rows){
+    void display(int rows, int v_1, int v_2, int v_3){
         for(int i = 0; i < y; ++i){
             for(int j = 0; j < rows; ++j){
                 fill(board_matrix[i][j]);
@@ -251,8 +251,11 @@ class Board{
 
         for(int i = 0; i < y; ++i){
             for(int j = rows; j < x; ++j){
-                fill(0);
+                push();
+                noStroke();
+                fill(v_1 * 1, v_2 * 1, v_3 * 1);
                 square(j * block_size + space_x, i * block_size + 80, block_size);
+                pop();
             }
         }
     }
