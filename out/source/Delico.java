@@ -15,7 +15,7 @@ import java.io.IOException;
 public class Delico extends PApplet {
 
 int Size;
-int level,rows,out,dificulty,second;
+int level,rows,out,dificulty;
 PImage psyco;
 PFont weirdfont;
 ScoreSquare scoreboard;
@@ -76,11 +76,9 @@ public void ScoreToLevels(int score){
         level = 5;
     }else if (score > 1400) {
         level = 5;
-        second = score + 100;
-    }
-    if(score == second){
-        second = score + 100;
-        dificulty++;
+        if(!main_board.completed_line){
+            dificulty++;
+        }
     }
 }
 public void keyPressed() { // The fig object updates the main_board matrix within its methods

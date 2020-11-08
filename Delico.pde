@@ -1,5 +1,5 @@
 int Size;
-int level,rows,out,dificulty,second;
+int level,rows,out,dificulty;
 PImage psyco;
 PFont weirdfont;
 ScoreSquare scoreboard;
@@ -38,8 +38,6 @@ void draw() {
     scoreboard.showBoard();
     makelevels();
     ScoreToLevels(main_board.points);
-    textSize(20);
-    fill(0);
 
 }
 
@@ -56,15 +54,13 @@ void ScoreToLevels(int score){
         level = 3;
     }else if (score ==1000) {
         level = 4;
-    }else if (score == 1400) {
+    }else if (score == 2000) {
         level = 5;
-    }else if (score > 1400) {
+    }else if (score > 2000) {
         level = 5;
-        second = score + 100;
-    }
-    if(score == second){
-        second = score + 100;
-        dificulty++;
+        if(main_board.completed_line){
+            dificulty++;
+        }
     }
 }
 void keyPressed() { // The fig object updates the main_board matrix within its methods
