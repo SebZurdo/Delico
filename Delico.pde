@@ -65,15 +65,19 @@ void HandleSidesL(){
 
 void HandleSidesD(){
     try{
-        fig.extraMove("UP");
-        for(int i = 0; i < fig.blocks; ++i){
-            main_board.board_matrix[fig.ShapeD[i][1]][fig.ShapeD[i][0]] = fig.coloration;
+        for(int k = 0; k < fig.blocks; ++k){
+            main_board.board_matrix[fig.ShapeD[k][1]][fig.ShapeD[k][0]] = 255;
+        }
+        fig.rotate();
+        fig.rotate();
+        fig.rotcont = fig.rotcont -1;
+        fig.rotcont = fig.rotcont + 1;
+        for(int k = 0; k < fig.blocks; ++k){
+            main_board.board_matrix[fig.ShapeD[k][1]][fig.ShapeD[k][0]] = fig.coloration;
         }
     } catch (Exception e) {
+        fig.extraMove("UP");
         HandleSidesD();
-        for(int j = 0; j < fig.blocks; ++j){
-            main_board.board_matrix[fig.ShapeD[j][1]][fig.ShapeD[j][0]] = fig.coloration;
-        }
     }
 }
 
@@ -101,6 +105,12 @@ void keyReleased() {
                 main_board.board_matrix[fig.ShapeD[i][1]][fig.ShapeD[i][0]] = 255;
             }
         } catch (Exception e) {
+            for (int i = 0; i < fig.blocks; ++i) {
+                if(fig.ShapeD[i][1] > 15){
+                    HandleSidesD();
+                    break;
+                }
+            }
             for (int i = 0; i < fig.blocks; ++i) {
                 if(fig.ShapeD[i][0] > int(n/2)){
                     HandleSidesR();
@@ -294,6 +304,7 @@ class Shape{
         }
         Size = 40;
         order = (int)random(limit);
+        order = 13;
         switch(order){
             case 0:
                 ShapeD = M0;
