@@ -820,6 +820,14 @@ ___
 
 <br>
 
+## **Funciones**
+<br>
+
+Las funciones implementadas para la implementación del programa son:
+
+<br>
+
+
 
 
 
