@@ -40,8 +40,6 @@ void draw() {
     ScoreToLevels(main_board.points);
     textSize(20);
     fill(0);
-    text("Rows"+str(rows),1000,500);
-    text("Blocks"+str(fig.blocks),1000,515);
 
 }
 
@@ -60,7 +58,8 @@ void ScoreToLevels(int score){
         level = 4;
     }else if (score == 1400) {
         level = 5;
-    }else if (score > 1700) {
+    }else if (score > 1400) {
+        level = 5;
         second = score + 100;
     }
     if(score == second){

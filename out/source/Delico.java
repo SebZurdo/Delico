@@ -24,6 +24,10 @@ Board mini_board;
 Shape fig;
 Shape other;
 
+int v_1 = 0;
+int v_2 = 0;
+int v_3 = 0;
+
 public void setup() {
     psyco = loadImage("Psycoetris.png");
     weirdfont = loadFont("Pristina-Regular-48.vlw");
@@ -40,7 +44,8 @@ public void setup() {
 }
 
 public void draw() {
-    background(0);
+    background(v_1 * 1, v_2 * 1, v_3 *1);  
+    
     main_board.display(rows);
     mini_board.display(6);
     fig.GoDown(0);
@@ -51,8 +56,6 @@ public void draw() {
     ScoreToLevels(main_board.points);
     textSize(20);
     fill(0);
-    text("Rows"+str(rows),1000,500);
-    text("Blocks"+str(fig.blocks),1000,515);
 
 }
 
@@ -71,7 +74,8 @@ public void ScoreToLevels(int score){
         level = 4;
     }else if (score == 1400) {
         level = 5;
-    }else if (score > 1700) {
+    }else if (score > 1400) {
+        level = 5;
         second = score + 100;
     }
     if(score == second){
@@ -190,6 +194,10 @@ public void HandleSidesD(){
 
 public void bottom(){
     if (!fig.Moving) {
+        v_1 = PApplet.parseInt(random(255));
+        v_2 = PApplet.parseInt(random(255));
+        v_3 = PApplet.parseInt(random(255));
+
         fig = other;
         fig.Moving = true;
         other = new Shape(level);
