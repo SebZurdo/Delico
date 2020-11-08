@@ -2,7 +2,6 @@ import processing.sound.*;
 SoundFile file;
 String audioname = "Astrix.mp3"; //Music setup
 String path;
-int Size;
 int level,rows,out,dificulty;
 PImage psyco; // Psyco-etris Image loaded as the font wasn't loadable from Processing
 PFont weirdfont; // Processing-loadable font used for score and level
