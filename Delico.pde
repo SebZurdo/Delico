@@ -4,16 +4,16 @@ String audioname = "Astrix.mp3"; //Music setup
 String path;
 int Size;
 int level,rows,out,dificulty;
-PImage psyco;
-PFont weirdfont;
+PImage psyco; // Psyco-etris Image loaded as the font wasn't loadable from Processing
+PFont weirdfont; // Processing-loadable font used for score and level
 ScoreSquare scoreboard;
-Board main_board;
+Board main_board; //Creation of two boards, main is the playable one, while mini is the one where the other/next shape is shown
 Board mini_board;
-Shape fig;
+Shape fig;  //Creation of two shape classes to show next piece and print the shape into the board
 Shape other;
 
 int v_1 = 0;
-int v_2 = 0;
+int v_2 = 0; //Variables to make the background change into different colors when player reaches level 5
 int v_3 = 0;
 
 void setup() {
@@ -27,15 +27,15 @@ void setup() {
     level = 1;
     main_board = new Board(20, 20, 255, 80);
     mini_board = new Board(6, 6, 255, 1120);
-    other = new Shape(level);
+    other = new Shape(level);        
     fig = new Shape(level);
     scoreboard = new ScoreSquare();
     fig.Moving = true;
-    other.inject(mini_board, level);
+    other.inject(mini_board, level); //Injects the "other" shape into the miniboard
 }
 
 void draw() {
-    if(level == 5 && int(random(1, 3)) % 2 == 0){
+    if(level == 5 && int(random(1, 3)) % 2 == 0){  //Background changes at high rate when player reaches level 5
         v_1 = int(random(255));
         v_2 = int(random(255));
         v_3 = int(random(255));
@@ -44,9 +44,7 @@ void draw() {
     }
     else{
     background(v_1 * 1, v_2 * 1, v_3 *1);
-
-    }  
-    
+    }   
     main_board.display(rows, v_1, v_2, v_3);
     mini_board.display(6, 0, 0, 0);
     fig.GoDown(0);
@@ -54,13 +52,12 @@ void draw() {
     LevelToLimits(level);
     scoreboard.showBoard();
     ScoreToLevels(main_board.points);
-
-    
+    gameover();
 
 }
 
 
-void ScoreToLevels(int score){
+void ScoreToLevels(int score){  //Converts the Board system points into Game system points
     if(score ==200){
         level = 2;
     }else if (score == 500) {
@@ -92,7 +89,7 @@ void keyReleased() {
     }
     
     if(keyCode == UP){
-        try{
+        try{    //Use of Try and Catch with some recursive functions to avoid the shape from going outside of the board and crashing the program
             fig.rotate();
             fig.rotate();
             for(int i = 0; i < fig.blocks; ++i){ // Here updates its position like in the Moveshape method
@@ -131,12 +128,12 @@ void keyReleased() {
     }
 
     
-    for(int i = 0; i < fig.blocks; ++i){
+    for(int i = 0; i < fig.blocks; ++i){ //Updates the shape's position and injects it into the main board
         main_board.board_matrix[fig.ShapeD[i][1]][fig.ShapeD[i][0]] = fig.coloration;
     }
 
 }
-void HandleSidesR(){
+void HandleSidesR(){ //Recursive function to move the shape when it goes over the right limit
     try{
         for(int k = 0; k < fig.blocks; ++k){
             main_board.board_matrix[fig.ShapeD[k][1]][fig.ShapeD[k][0]] = 255;
@@ -152,7 +149,7 @@ void HandleSidesR(){
     }
 }
 
-void HandleSidesL(){
+void HandleSidesL(){ //Recursive function to move the shape when it goes over the left limit
     try{
         for(int k = 0; k < fig.blocks; ++k){
             main_board.board_matrix[fig.ShapeD[k][1]][fig.ShapeD[k][0]] = 255;
@@ -168,7 +165,7 @@ void HandleSidesL(){
     }
 }
 
-void HandleSidesD(){
+void HandleSidesD(){ //Recursive function to move the shape upwards when it rotates close to the bottom
     try{
         for(int k = 0; k < fig.blocks; ++k){
             main_board.board_matrix[fig.ShapeD[k][1]][fig.ShapeD[k][0]] = 255;
@@ -190,19 +187,17 @@ void bottom(){
         v_2 = int(random(255));
         v_3 = int(random(255));
 
-        gameover(fig, main_board, mini_board);
         fig = other;
-        fig.Moving = true;
+        fig.Moving = true; //Shape stops moving downwards, so it turns into "other"/next piece and other recieves a new shape (and atattributes)
         other = new Shape(level);
         main_board.completed_lines(rows, level);
         mini_board.clean();
         other.inject(mini_board, level);
-
-        
     }
 }
 
-void LevelToLimits(int level){
+
+void LevelToLimits(int level){  //Converts level to row number, allowing the board to grow depending on the level
     switch(level){
         case 1:
             rows = 4;
@@ -219,29 +214,6 @@ void LevelToLimits(int level){
         case 5:
             rows = 20;
             break; 
-    }
-}
-
-void gameover(Shape fig, Board main_board, Board mini_board){
-    for(int i = 0; i < fig.blocks; ++i){
-        if(fig.ShapeD[i][1] == 0){
-            background(0);
-
-            for(int y_1 = 0; y_1 < main_board.y; ++y_1){
-                for(int x_1 = 0; x_1 < main_board.x; ++x_1){
-                    main_board.board_matrix[y_1][x_1] = 0;
-                }
-            }
-
-            for(int y_2 = 0; y_2 < mini_board.y; ++y_2){
-                for(int x_2 = 0; x_2 < main_board.x; ++x_2){
-                    main_board.board_matrix[y_2][x_2] = 0;
-                }
-            }
-            noLoop();
-
-            // Aqui un ciclo infinito, si se presiona cierta tecla no se reiniciar el juego si quiere, si no pues solo tendría que borrar el rectangulo de puntaje y poner un letrero de puntaje final y sha
-        }
     }
 }
 
@@ -267,7 +239,7 @@ class Board{
 
         for(int i = 0; i < y; ++i){
             for(int j = 0; j < x; ++j){
-                board_matrix[i][j] = board_color; 
+                board_matrix[i][j] = board_color;   
             }
         }
     }
@@ -367,14 +339,14 @@ class Board{
 
 }
 class Shape{
-    //Monomino//
+    //Monominoe//
     private int[][] M0 = {{0,0}};
-    //Binomino//
+    //Binominoe//
     private int[][] MR = {{0,0},{0,1}};
-    //Triminos//
+    //Triminoes//
     private int[][] C0 = {{0,0},{1,0},{0,1}};
     private int[][] R0 = {{0,0},{0,1},{0,2}};
-    //Tetronimos//
+    //Tetronimoes//
     private int[][] drado = {{0,0},{1,0},{0,1},{1,1}};
     private int[][] line = {{0,0},{1,0},{2,0},{3,0},};
     private int[][] treh = {{0,0},{1,0},{2,0},{2,1}};
@@ -382,7 +354,7 @@ class Shape{
     private int[][] eleD = {{0,0},{1,0},{2,0},{2,1}};
     private int[][] S1 = {{0,0},{1,0},{1,1},{2,1}};
     private int[][] S2 = {{0,1},{1,1},{1,0},{2,0}};
-    //Pentominos//
+    //Pentominoes//
     private int[][] F1 = {{1,0},{2,0},{0,1},{1,1},{1,2}};
     private int[][] F2 = {{0,0},{1,0},{1,1},{2,1},{1,2}};
     private int[][] line2 = {{0,0},{1,0},{2,0},{3,0},{4,0}};
@@ -409,7 +381,7 @@ class Shape{
     private int cont, rotcont;
     private int limit;
     private int blocks;
-    public Shape(int lvl){
+    public Shape(int lvl){ //Constructor recieves level, putting a limit on wich kind of polyminoes can spawn
         switch(level){
             case 1:
                 limit = 1;
@@ -429,7 +401,7 @@ class Shape{
         }
         Size = 40;
         order = (int)random(0,limit);
-        switch(order){
+        switch(order){  //Based on the level, this switch is restricted so board dimensions are proportional to polyominoes' blocks
             case 0:
                 ShapeD = M0;
                 coloration = #13FF1C;
@@ -556,7 +528,7 @@ class Shape{
         }else if (order > 3 && order <= 10) {
             blocks = 4;
         }else{
-            blocks = 5;
+            blocks = 5;    //Depending on the restricted switch and the polyominoe selected, block number is taken in order to operate with the polyominoe
         }
         cont = 1;
         OS = ShapeD;
@@ -564,7 +536,7 @@ class Shape{
     }
 
     public void rotate(){
-        if (ShapeD != drado && ShapeD != X0 && ShapeD != M0) {
+        if (ShapeD != drado && ShapeD != X0 && ShapeD != M0) {  //Rotation works in the same way as rotating a figure in the Cartesian coordinate system, (changing axises from their place and changing their signs)
             int[][] rotated = new int[blocks][2];
             if (rotcont % 4 == 0) {
                 for (int i = 0; i < blocks; ++i) {
@@ -592,14 +564,14 @@ class Shape{
         }
     }
 
-    public void GoDown(int level){
-        if(cont%(55-dificulty) == 0){
+    public void GoDown(int level){  //Function that makes the shape go down constantly, it depends on the variable dificulty wich grows depending on the lines that are completed
+        if(cont%(55-dificulty) == 0){ //This is used instead of a "delay" function to avoid timing conflicts
             MoveShape("DOWN", main_board);
         }
         cont++;
     }
 
-    public boolean Limit(String dir){
+    public boolean Limit(String dir){   //Function that detects the limits on where the shape can move, left and down are always the same while right one changes depending on the main board's row number
         switch(dir){
             case "RIGHT":
                 for (int i = 0; i < blocks; ++i) {
@@ -626,28 +598,25 @@ class Shape{
         }
         return true;
     }
-    //-----------------------------------------------------------------------------------------------------------------------------
-    //MOVIMIENTOS LATERALES Y HACIA DOWN CONTROLADOS
-    //-----------------------------------------------------------------------------------------------------------------------------
-    public void MoveShape(String dir, Board main_board){
+    public void MoveShape(String dir, Board main_board){  //Function that moves the Shape and instantly injects it's position on the main board
         for(int i = 0; i < blocks; ++i){ // Erases its previous position in the main_board
             main_board.board_matrix[ShapeD[i][1]][ShapeD[i][0]] = 255;
         }
 
         if(Limit(dir) && colitions(dir, main_board)){
-            if(dir == "RIGHT"){
+            if(dir == "RIGHT"){  //Right
                 for (int i = 0; i < blocks; ++i) {
-                    ShapeD[i][0]++;  //Dereiaaaaa
+                    ShapeD[i][0]++;  
                 }
             }
-            if(dir == "LEFT"){
+            if(dir == "LEFT"){ //Left
                 for (int i = 0; i < blocks; ++i) {
-                    ShapeD[i][0]--;  //Izquierdaaaaaa
+                    ShapeD[i][0]--;  
                 }
             }
-            if(dir == "DOWN"){
+            if(dir == "DOWN"){ //Down
                 for (int i = 0; i < blocks; ++i) {
-                    ShapeD[i][1]++;  //Abajoooooo
+                    ShapeD[i][1]++;  
                 }
             }
         }
@@ -656,8 +625,8 @@ class Shape{
             main_board.board_matrix[ShapeD[i][1]][ShapeD[i][0]] = coloration;
         }
     }
-    public void extraMove(String dir){
-        if(dir == "UP"){
+    public void extraMove(String dir){ //Function that moves the shape but doesn't injects it's position on the main board
+        if(dir == "UP"){               //This is used to move the shape while it's outside of the matrix limits after a rotation
             for (int i = 0; i < blocks; ++i) {
                 ShapeD[i][1]--;  //UP
             }
@@ -665,24 +634,24 @@ class Shape{
         if(Limit(dir)){
             if(dir == "RIGHT"){
                 for (int i = 0; i < blocks; ++i) {
-                    ShapeD[i][0]++;  //Dereiaaaaa
+                    ShapeD[i][0]++;  //Right
                 }
             }
             if(dir == "LEFT"){
                 for (int i = 0; i < blocks; ++i) {
-                    ShapeD[i][0]--;  //Izquierdaaaaaa
+                    ShapeD[i][0]--;  //Left
                 }
             }
             if(dir == "DOWN"){
                 for (int i = 0; i < blocks; ++i) {
-                    ShapeD[i][1]++;  //Abajoooooo
+                    ShapeD[i][1]++;  //Down
                 }
             }
         }
     }
 
-    boolean colitions(String dir, Board main_board){ 
-        int x_1; // Auxiliar variables
+    boolean colitions(String dir, Board main_board){ //Function that detects collitions depending on the shape's surrounding
+        int x_1; // Auxiliar variables               //Works thanks to the shape's positioning being constantly injected on the matrix
         int y_1;
 
         if(dir == "DOWN"){
@@ -763,7 +732,7 @@ class ScoreSquare{
         textFont(weirdfont, 50);
         text("Score: "+str(main_board.points),1130,540);
         text("Level: "+str(dificulty),1130,680);
-        //text("Gameover: "+str(gameover()),1130,700);
+        text("Gameover: "+str(gameover()),1130,700);
         pop();
     }
 }
