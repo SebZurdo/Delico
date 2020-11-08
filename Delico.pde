@@ -54,7 +54,8 @@ void draw() {
     LevelToLimits(level);
     scoreboard.showBoard();
     ScoreToLevels(main_board.points);
-    gameover();
+
+    
 
 }
 
@@ -189,18 +190,18 @@ void bottom(){
         v_2 = int(random(255));
         v_3 = int(random(255));
 
+        gameover(fig, main_board, mini_board);
         fig = other;
         fig.Moving = true;
         other = new Shape(level);
         main_board.completed_lines(rows, level);
         mini_board.clean();
         other.inject(mini_board, level);
+
+        
     }
 }
 
-/*void mousePressed(){
-    level++;
-}*/
 void LevelToLimits(int level){
     switch(level){
         case 1:
@@ -218,6 +219,29 @@ void LevelToLimits(int level){
         case 5:
             rows = 20;
             break; 
+    }
+}
+
+void gameover(Shape fig, Board main_board, Board mini_board){
+    for(int i = 0; i < fig.blocks; ++i){
+        if(fig.ShapeD[i][1] == 0){
+            background(0);
+
+            for(int y_1 = 0; y_1 < main_board.y; ++y_1){
+                for(int x_1 = 0; x_1 < main_board.x; ++x_1){
+                    main_board.board_matrix[y_1][x_1] = 0;
+                }
+            }
+
+            for(int y_2 = 0; y_2 < mini_board.y; ++y_2){
+                for(int x_2 = 0; x_2 < main_board.x; ++x_2){
+                    main_board.board_matrix[y_2][x_2] = 0;
+                }
+            }
+            noLoop();
+
+            // Aqui un ciclo infinito, si se presiona cierta tecla no se reiniciar el juego si quiere, si no pues solo tendría que borrar el rectangulo de puntaje y poner un letrero de puntaje final y sha
+        }
     }
 }
 
@@ -739,7 +763,7 @@ class ScoreSquare{
         textFont(weirdfont, 50);
         text("Score: "+str(main_board.points),1130,540);
         text("Level: "+str(dificulty),1130,680);
-        text("Gameover: "+str(gameover()),1130,700);
+        //text("Gameover: "+str(gameover()),1130,700);
         pop();
     }
 }
