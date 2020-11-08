@@ -1,3 +1,9 @@
+import processing.sound.*;
+
+SoundFile file;
+String audioname = "Astrix.mp3"; //Music setup
+String path;
+
 int Size;
 int level,rows,out,dificulty;
 PImage psyco;
@@ -13,6 +19,11 @@ int v_2 = 0;
 int v_3 = 0;
 
 void setup() {
+    path = sketchPath(audioname);
+    file = new SoundFile(this, path); // Music setup
+    file.play();
+
+
     psyco = loadImage("Psycoetris.png");
     weirdfont = loadFont("Pristina-Regular-48.vlw");
     strokeWeight(3);
@@ -48,13 +59,13 @@ void makelevels(){
 }
 
 void ScoreToLevels(int score){
-    if(score ==100){
+    if(score ==200){
         level = 2;
-    }else if (score == 200) {
+    }else if (score == 500) {
         level = 3;
-    }else if (score ==300) {
+    }else if (score ==800) {
         level = 4;
-    }else if (score >= 400) {
+    }else if (score >= 1800) {
         level = 5;
     }
 }
